@@ -174,7 +174,7 @@ if (isPreview && saveWebsite) {
   const copy=document.documentElement.cloneNode(true);
   copy.querySelector('#photo-status').textContent='';copy.querySelector('#enquiry').removeAttribute('open');copy.querySelector('#enquiry-status').textContent='';
   const assessment=copy.querySelector('#free-assessment');if(assessment)assessment.hidden=true;
-  ['question-options','assessment-answer-review','assessment-score','assessment-summary-copy','assessment-topics','assessment-announcement','question-prompt'].forEach(id=>{const node=copy.querySelector('#'+id);if(node)node.textContent='';});
+  ['question-options','assessment-answer-review','assessment-score','assessment-summary-copy','assessment-topics','assessment-band-results','assessment-announcement','question-prompt','question-diagram','question-difficulty'].forEach(id=>{const node=copy.querySelector('#'+id);if(node)node.textContent='';});
   copy.querySelector('#navigation').classList.remove('open');copy.querySelector('.menu-toggle').setAttribute('aria-expanded','false');
   copy.querySelectorAll('input,textarea').forEach(input=>{input.removeAttribute('value');if(input.tagName==='TEXTAREA')input.textContent='';});
   document.querySelectorAll('select[id]').forEach(select=>{const target=copy.querySelector('#'+select.id);if(target)[...target.options].forEach(option=>option.toggleAttribute('selected',option.value===select.value));});
@@ -190,6 +190,8 @@ if (isPreview && saveWebsite) {
  const dataElement = document.getElementById('assessment-data');
  if (!dataElement) return;
  const subjects = JSON.parse(dataElement.textContent);
+ const difficultyNames = {easy:'Easy', medium:'Medium', hard:'Hard'};
+ const difficultyLabel = question => difficultyNames[question.difficulty] + ' · ' + question.grade_band + '-style';
  const section = document.getElementById('free-assessment');
  const questionArea = document.getElementById('assessment-questions');
  const resultArea = document.getElementById('assessment-results');
@@ -215,10 +217,15 @@ if (isPreview && saveWebsite) {
   const question = active.questions[questionIndex];
   const label = 'Question ' + (questionIndex + 1) + ' of ' + active.questions.length;
   document.getElementById('assessment-progress-label').textContent = label;
+  const difficultyBadge = document.getElementById('question-difficulty');
+  difficultyBadge.className = 'difficulty-badge ' + question.difficulty;
+  difficultyBadge.textContent = difficultyLabel(question);
   const progress = document.getElementById('assessment-progress');
   progress.max = active.questions.length; progress.value = questionIndex + 1;
   const prompt = document.getElementById('question-prompt');
   prompt.textContent = question.prompt;
+  const diagram = document.getElementById('question-diagram');diagram.replaceChildren();
+  if (question.diagram === 'circle-chord') diagram.innerHTML = '<figure class="maths-diagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="circle-diagram-title circle-diagram-desc"><title id="circle-diagram-title">Circle and chord AB</title><desc id="circle-diagram-desc">Circle with centre O and radius 10 centimetres. Chord AB is 12 centimetres long. The perpendicular from O to AB is marked with a right angle. Triangle AOB is shaded.</desc><circle cx="200" cy="145" r="110" fill="#f6f8fb" stroke="#064280" stroke-width="2"/><path d="M200 145 L134 233 L266 233 Z" fill="#dce8f7" stroke="#064280" stroke-width="2"/><path d="M200 145 V233" stroke="#9b640d" stroke-width="2" stroke-dasharray="5 5"/><path d="M200 223 H210 V233" fill="none" stroke="#9b640d" stroke-width="1.5"/><circle cx="200" cy="145" r="3" fill="#064280"/><g fill="#064280" font-family="Arial,sans-serif" font-size="16"><text x="209" y="141">O</text><text x="117" y="250">A</text><text x="272" y="250">B</text><text x="115" y="180">10 cm</text><text x="178" y="278">12 cm</text></g></svg><figcaption>Diagram not to scale.</figcaption></figure>';
   const options = document.getElementById('question-options');
   options.replaceChildren();
   question.options.forEach((text, index) => {
@@ -258,6 +265,14 @@ if (isPreview && saveWebsite) {
   document.getElementById('assessment-summary-copy').textContent = correct === total
    ? 'All six answers were correct in this check. Explore the explanations, then consider more challenging questions with a teacher or tutor.'
    : 'Use the explanations to explore the questions that were tricky. One useful next step is to revisit a single topic together.';
+  const bandResults = document.getElementById('assessment-band-results');bandResults.replaceChildren();
+  for (const difficulty of ['easy','medium','hard']) {
+   const indexes = active.questions.map((question,index)=>question.difficulty===difficulty?index:-1).filter(index=>index>=0);
+   const bandCorrect = indexes.filter(index=>answers[index]===active.questions[index].correct).length;
+   const card = element('div',undefined,'assessment-band-result '+difficulty);
+   card.append(element('h4',difficultyLabel(active.questions[indexes[0]])),element('p',bandCorrect+' of '+indexes.length+' correct'));
+   bandResults.append(card);
+  }
   const topics = document.getElementById('assessment-topics');topics.replaceChildren();
   for (const [isCorrect, heading] of [[true,'Correct in this check'],[false,'Worth revisiting']]) {
    const box = element('div', undefined, 'topic-summary');
@@ -273,7 +288,7 @@ if (isPreview && saveWebsite) {
    const correctAnswer = answers[index] === question.correct;
    const details = element('details',undefined,'answer-review-item');
    const summary = element('summary');
-   summary.append(element('span',(index+1)+'. '+question.topic),element('span',correctAnswer?'Correct':'Review','answer-outcome '+(correctAnswer?'correct':'review')));
+   summary.append(element('span',(index+1)+'. '+question.topic+' · '+difficultyLabel(question)),element('span',correctAnswer?'Correct':'Review','answer-outcome '+(correctAnswer?'correct':'review')));
    details.append(summary,element('p',question.prompt,'review-question'));
    details.append(element('p','Your answer: '+question.options[answers[index]],'review-choice'));
    if (!correctAnswer) details.append(element('p','Correct answer: '+question.options[question.correct],'review-correct'));

@@ -21,7 +21,9 @@ The Resources page has six-question starter assessments for Maths, Applications 
 
 Parents and students can choose a subject, answer at their own pace, return to change answers, then see a score for those six questions, explanations and topics worth revisiting. No account, email, payment, storage or answer submission is involved. Assessments reset when leaving/reloading the page; saved website copies exclude attempts.
 
-These are **draft starter questions for tutor review**, using introductory National 5 topics or general subject skills. They do not cover every course unit and do not predict an exam grade. Have subject tutors approve questions, distractors and explanations before publishing.
+Each self-check starts with **two easy (C/D-style)** questions, followed by **two medium (B-style)** and **two hard (A-style)** questions. The questions include application and reasoning, not just recall. Maths now includes indices and circle geometry in place of averages and probability.
+
+These are **draft questions and indicative difficulty bands for tutor review**, using National 5-style topics or general subject skills. The bands are not official grade allocations. They do not cover every course unit and do not predict an exam grade. Have subject tutors approve questions, distractors and explanations before publishing.
 
 ## Editing and rebuilding
 
@@ -37,3 +39,7 @@ Browser checks are in `tests/test_resources.py`. Run `python tests/test_resource
 ## Draft status
 
 Enquiry forms are local previews and send nothing. Timetable details came from the original website and need current availability confirmation. Finalise payment/cancellation terms, business policies and metric definitions before launch. No deployment has been performed.
+
+## Our tutors and safeguarding
+
+Our Approach now includes dedicated team and safeguarding sections, linked from the homepage, 1:1 page and footer. The copy uses the facts supplied by the company: every tutor holds a PVG; some tutors are GTC Scotland-registered teachers; the team includes subject professionals and experienced graduates; selection considers student connection, specialist knowledge and shared values. TutorCruncher is described as supporting organisation and oversight as part of the safeguarding approach. No unconfirmed software features or session-recording claims are included.

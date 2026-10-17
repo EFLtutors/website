@@ -12,6 +12,14 @@ from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
 SUBJECTS = json.loads((ROOT / 'draft-source/assessments.json').read_text())
+DIFFICULTIES = ['easy','easy','medium','medium','hard','hard']
+GRADE_BANDS = ['C/D','C/D','B','B','A','A']
+for subject in SUBJECTS:
+ assert [q['difficulty'] for q in subject['questions']] == DIFFICULTIES
+ assert [q['grade_band'] for q in subject['questions']] == GRADE_BANDS
+maths_topics = [q['topic'] for q in SUBJECTS[0]['questions']]
+assert 'Indices' in maths_topics and 'Circle geometry' in maths_topics
+assert 'Averages' not in maths_topics and 'Probability' not in maths_topics
 class Quiet(SimpleHTTPRequestHandler):
  def log_message(self, *args): pass
 
@@ -46,8 +54,13 @@ with TemporaryDirectory(prefix='efl-resources-') as isolated:
    assert page.locator('#assessment-back').is_disabled()
    for i,question in enumerate(subject['questions']):
     assert page.locator('#assessment-progress-label').inner_text()==f'Question {i+1} of 6'
+    expected_label=question['difficulty'].title()+' · '+question['grade_band']+'-style'
+    assert page.locator('#question-difficulty').inner_text()==expected_label
+    if question.get('diagram')=='circle-chord':
+     assert page.get_by_role('img',name='Circle and chord AB').is_visible()
     answer(page,question)
    assert page.locator('#assessment-score').inner_text()=='6 of 6 starter questions correct',subject['id']
+   assert page.locator('.assessment-band-result p').all_text_contents()==['2 of 2 correct']*3
    assert page.locator('.answer-review-item').count()==6
    explanations=page.locator('.review-explanation').all_text_contents()
    assert explanations==[q['explanation'] for q in subject['questions']]
@@ -59,6 +72,7 @@ with TemporaryDirectory(prefix='efl-resources-') as isolated:
   page.locator('[data-start-assessment="maths"]').click()
   for question in maths['questions']:answer(page,question,False)
   assert page.locator('#assessment-score').inner_text()=='0 of 6 starter questions correct'
+  assert page.locator('.assessment-band-result p').all_text_contents()==['0 of 2 correct']*3
   assert page.locator('.topic-summary').nth(1).locator('li').count()==6
   page.locator('#assessment-restart').click()
   assert page.get_by_role('radio',checked=True).count()==0
@@ -71,6 +85,7 @@ with TemporaryDirectory(prefix='efl-resources-') as isolated:
   page.locator('#assessment-next').click()
   for question in maths['questions'][2:]:answer(page,question)
   assert page.locator('#assessment-score').inner_text()=='4 of 6 starter questions correct'
+  assert page.locator('.assessment-band-result p').all_text_contents()==['0 of 2 correct','2 of 2 correct','2 of 2 correct']
   page.locator('.answer-review-item').first.locator('summary').click()
   assert page.locator('.answer-review-item').first.locator('.review-correct').is_visible()
   print('PASS: zero and mixed scores, revisiting topics, back/change answers, review disclosures and restart.',flush=True)
@@ -111,6 +126,13 @@ with TemporaryDirectory(prefix='efl-resources-') as isolated:
    for question in SUBJECTS[8]['questions'][1:]:answer(page,question)
    assert page.evaluate('document.documentElement.scrollWidth<=innerWidth'),('feedback',width)
    assert page.locator('#assessment-results').is_visible()
+   page.locator('[data-start-assessment="maths"]').click()
+   for question in maths['questions'][:5]:answer(page,question)
+   assert page.get_by_role('img',name='Circle and chord AB').is_visible()
+   assert page.evaluate('document.documentElement.scrollWidth<=innerWidth'),('circle diagram',width)
+   answer(page,maths['questions'][5])
+   assert page.locator('.assessment-band-result p').all_text_contents()==['2 of 2 correct']*3
+   assert page.evaluate('document.documentElement.scrollWidth<=innerWidth'),('difficulty feedback',width)
   page.set_viewport_size({'width':390,'height':844});page.goto('http://127.0.0.1:8765/',wait_until='networkidle')
   page.get_by_role('button',name='Menu',exact=True).click();page.locator('header nav').get_by_role('link',name='Resources',exact=True).click();page.wait_for_url('**/resources.html')
   assert page.locator('.resource-card').count()==12

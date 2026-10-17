@@ -64,3 +64,11 @@ The checks use introductory National 5 topics or general subject skills, rather 
 No personal details are requested; there is no sign-up or email gate. Answers are held in memory for the current attempt, are not transmitted or stored, and are cleared when leaving/reloading the Resources page. A saved website copy excludes the attempt. Recommended next-step links point to the relevant Booster Classes or 1:1 page.
 
 The canonical build source is now saved in this repository under `draft-source/`. Run `python draft-source/build.py` to generate the six normal HTML pages and `preview.html`. The original five-page draft remains available in Git history at commit `0b3fde6`.
+
+## Progressive difficulty and team update
+
+Each assessment now has two easy (C/D-style), two medium (B-style) and two hard (A-style) questions, in that order. These are indicative challenge bands for tutor review, not officially graded questions or predicted examination grades. Later questions have been revised to require application, multiple steps or evaluation. Feedback reports performance in each pair, without converting the result into a grade.
+
+Maths replaces averages and probability with fractional indices and circle geometry. The final circle question combines the perpendicular bisector of a chord, Pythagoras and triangle area, with an accessible SVG diagram. Topic alignment was checked against the National 5 Mathematics course specification: https://www.sqa.org.uk/files_ccc/n5-course-spec-mathematics.pdf (indices and surds; the relationship between centre, chord and perpendicular bisector). This is topic alignment, not official approval or difficulty calibration of the authored questions.
+
+New company-supplied team and safeguarding facts are incorporated into Our Approach, the homepage, 1:1 tuition, the Schools & Partners FAQ and footer links. Every tutor holds a PVG; some are GTC Scotland-registered teachers; the team also includes subject professionals and experienced graduates. Tutors are selected for connection with students, specialist knowledge and values aligned with EFL Tutors. TutorCruncher supports organisation and oversight as part of the safeguarding approach. The wording does not assert specific TutorCruncher features, session recording, automatic checks, a designated safeguarding lead or a formal policy not supplied in this conversation.
