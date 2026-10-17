@@ -9,12 +9,13 @@ menuButton.addEventListener('click', () => {
  const open = menuButton.getAttribute('aria-expanded') !== 'true';
  menuButton.setAttribute('aria-expanded', String(open)); navigation.classList.toggle('open', open);
 });
-const pageNames = {home:'Home', 'booster-classes':'Booster Classes', tutoring:'1:1 Tutoring', 'schools-partners':'Schools & Partners', 'our-approach':'Our Approach'};
+const pageNames = {home:'Home', 'booster-classes':'Booster Classes', tutoring:'1:1 Tutoring', 'schools-partners':'Schools & Partners', 'our-approach':'Our Approach', resources:'Resources'};
 let currentPage = document.body.dataset.startPage || 'home';
 function renderPage(page, anchor = '', moveFocus = true) {
  const panel = document.querySelector('[data-page="' + page + '"]');
  if (!panel) return;
  currentPage = page;
+ window.dispatchEvent(new CustomEvent('efl-page-change', {detail:{page}}));
  document.querySelectorAll('.site-page').forEach(item => item.hidden = item !== panel);
  document.querySelectorAll('.nav-link').forEach(link => {
   if (link.dataset.route === page) link.setAttribute('aria-current', 'page');
@@ -172,12 +173,148 @@ if (isPreview && saveWebsite) {
  saveWebsite.addEventListener('click', () => {
   const copy=document.documentElement.cloneNode(true);
   copy.querySelector('#photo-status').textContent='';copy.querySelector('#enquiry').removeAttribute('open');copy.querySelector('#enquiry-status').textContent='';
+  const assessment=copy.querySelector('#free-assessment');if(assessment)assessment.hidden=true;
+  ['question-options','assessment-answer-review','assessment-score','assessment-summary-copy','assessment-topics','assessment-announcement','question-prompt'].forEach(id=>{const node=copy.querySelector('#'+id);if(node)node.textContent='';});
   copy.querySelector('#navigation').classList.remove('open');copy.querySelector('.menu-toggle').setAttribute('aria-expanded','false');
   copy.querySelectorAll('input,textarea').forEach(input=>{input.removeAttribute('value');if(input.tagName==='TEXTAREA')input.textContent='';});
   document.querySelectorAll('select[id]').forEach(select=>{const target=copy.querySelector('#'+select.id);if(target)[...target.options].forEach(option=>option.toggleAttribute('selected',option.value===select.value));});
   copy.querySelector('body').dataset.startPage=currentPage;
   const blob=new Blob(['<!doctype html>\n',copy.outerHTML],{type:'text/html;charset=utf-8'});
   const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='efl-tutors-complete-website.html';document.body.append(link);link.click();link.remove();
-  setTimeout(()=>URL.revokeObjectURL(url),10000);photoStatus.textContent='Complete website saved with both photos and all five pages.';
+  setTimeout(()=>URL.revokeObjectURL(url),10000);photoStatus.textContent='Complete website saved with both photos and all six pages.';
  });
 }
+
+// Free, local subject self-checks. No names, storage or network submission.
+(() => {
+ const dataElement = document.getElementById('assessment-data');
+ if (!dataElement) return;
+ const subjects = JSON.parse(dataElement.textContent);
+ const section = document.getElementById('free-assessment');
+ const questionArea = document.getElementById('assessment-questions');
+ const resultArea = document.getElementById('assessment-results');
+ const assessmentForm = document.getElementById('assessment-form');
+ const next = document.getElementById('assessment-next');
+ const back = document.getElementById('assessment-back');
+ const announcement = document.getElementById('assessment-announcement');
+ let active = null;
+ let questionIndex = 0;
+ let answers = [];
+ function element(tag, text, className) {
+  const node = document.createElement(tag);
+  if (text !== undefined) node.textContent = text;
+  if (className) node.className = className;
+  return node;
+ }
+ function focusAndScroll(node) {
+  node.setAttribute('tabindex', '-1');
+  node.focus({preventScroll:true});
+  node.scrollIntoView({block:'start'});
+ }
+ function showQuestion(moveFocus = true) {
+  const question = active.questions[questionIndex];
+  const label = 'Question ' + (questionIndex + 1) + ' of ' + active.questions.length;
+  document.getElementById('assessment-progress-label').textContent = label;
+  const progress = document.getElementById('assessment-progress');
+  progress.max = active.questions.length; progress.value = questionIndex + 1;
+  const prompt = document.getElementById('question-prompt');
+  prompt.textContent = question.prompt;
+  const options = document.getElementById('question-options');
+  options.replaceChildren();
+  question.options.forEach((text, index) => {
+   const choice = element('label', undefined, 'question-option');
+   const radio = document.createElement('input');
+   radio.type = 'radio';radio.name = 'assessment-answer';radio.value = String(index);
+   radio.id = 'answer-' + active.id + '-' + questionIndex + '-' + index;
+   radio.checked = answers[questionIndex] === index;
+   choice.htmlFor = radio.id;
+   const badge = element('span', String.fromCharCode(65 + index), 'option-letter');badge.setAttribute('aria-hidden','true');
+   choice.append(radio, badge, element('span', text));
+   options.append(choice);
+  });
+  back.disabled = questionIndex === 0;
+  next.disabled = !Number.isInteger(answers[questionIndex]);
+  next.textContent = questionIndex === active.questions.length - 1 ? 'See My Feedback →' : 'Next Question →';
+  announcement.textContent = label;
+  if (moveFocus) focusAndScroll(prompt);
+ }
+ function startAssessment(id) {
+  const subject = subjects.find(item => item.id === id);
+  if (!subject) return;
+  active = subject; questionIndex = 0; answers = Array(subject.questions.length).fill(null);
+  document.getElementById('assessment-title').textContent = subject.name + ' Starter Self-Check';
+  section.hidden = false;questionArea.hidden = false;resultArea.hidden = true;
+  document.getElementById('assessment-answer-review').replaceChildren();
+  showQuestion(false);
+  focusAndScroll(document.getElementById('assessment-title'));
+ }
+ function showResults() {
+  if (!active || answers.some(answer => !Number.isInteger(answer))) return;
+  questionArea.hidden = true;resultArea.hidden = false;
+  const total = active.questions.length;
+  const correct = active.questions.filter((question,index) => answers[index] === question.correct).length;
+  const score = document.getElementById('assessment-score');
+  score.textContent = correct + ' of ' + total + ' starter questions correct';
+  document.getElementById('assessment-summary-copy').textContent = correct === total
+   ? 'All six answers were correct in this check. Explore the explanations, then consider more challenging questions with a teacher or tutor.'
+   : 'Use the explanations to explore the questions that were tricky. One useful next step is to revisit a single topic together.';
+  const topics = document.getElementById('assessment-topics');topics.replaceChildren();
+  for (const [isCorrect, heading] of [[true,'Correct in this check'],[false,'Worth revisiting']]) {
+   const box = element('div', undefined, 'topic-summary');
+   box.append(element('h4',heading));
+   const items = active.questions.filter((question,index) => (answers[index] === question.correct) === isCorrect);
+   if (items.length) {
+    const list = element('ul');items.forEach(question => list.append(element('li',question.topic)));box.append(list);
+   } else box.append(element('p',isCorrect ? 'No correct answers in this short check. The explanations below are a place to start.' : 'No topics to revisit from these six questions. This does not assess the whole course.'));
+   topics.append(box);
+  }
+  const review = document.getElementById('assessment-answer-review');review.replaceChildren();
+  active.questions.forEach((question,index) => {
+   const correctAnswer = answers[index] === question.correct;
+   const details = element('details',undefined,'answer-review-item');
+   const summary = element('summary');
+   summary.append(element('span',(index+1)+'. '+question.topic),element('span',correctAnswer?'Correct':'Review','answer-outcome '+(correctAnswer?'correct':'review')));
+   details.append(summary,element('p',question.prompt,'review-question'));
+   details.append(element('p','Your answer: '+question.options[answers[index]],'review-choice'));
+   if (!correctAnswer) details.append(element('p','Correct answer: '+question.options[question.correct],'review-correct'));
+   details.append(element('p',question.explanation,'review-explanation'));
+   review.append(details);
+  });
+  const support = document.getElementById('assessment-support-link');
+  const route = active.support;
+  support.dataset.route = route;
+  support.href = isPreview ? '#/'+route : route === 'tutoring' ? 'tutoring.html' : 'booster-classes.html';
+  support.textContent = route === 'tutoring' ? 'Explore 1:1 Tutoring' : 'Explore Booster Classes';
+  announcement.textContent = 'Self-check complete. '+score.textContent+'. Feedback is ready.';
+  focusAndScroll(score);
+ }
+ document.querySelectorAll('[data-start-assessment]').forEach(button => button.addEventListener('click',()=>startAssessment(button.dataset.startAssessment)));
+ assessmentForm.addEventListener('change',event=>{
+  if (event.target.name !== 'assessment-answer') return;
+  answers[questionIndex] = Number(event.target.value);next.disabled = false;
+ });
+ assessmentForm.addEventListener('submit',event=>{
+  event.preventDefault();
+  if (!active || !Number.isInteger(answers[questionIndex])) return;
+  if (questionIndex === active.questions.length - 1) showResults();
+  else {questionIndex++;showQuestion();}
+ });
+ back.addEventListener('click',()=>{if (questionIndex > 0) {questionIndex--;showQuestion();}});
+ document.getElementById('assessment-restart').addEventListener('click',()=>{if(active)startAssessment(active.id);});
+ document.getElementById('choose-another-subject').addEventListener('click',()=>{
+  active = null;answers = [];section.hidden = true;
+  focusAndScroll(document.querySelector('#assessment-library h2'));
+ });
+ const category = document.getElementById('resource-category');
+ category.addEventListener('change',()=>{
+  let count = 0;
+  document.querySelectorAll('[data-resource-category]').forEach(card=>{
+   const show = category.value === 'all' || card.dataset.resourceCategory === category.value;
+   card.hidden = !show;if(show)count++;
+  });
+  document.getElementById('resource-count').textContent = count + ' subject assessment' + (count === 1 ? '' : 's');
+ });
+ window.addEventListener('efl-page-change',event=>{
+  if (event.detail.page !== 'resources') {active = null;answers = [];section.hidden = true;}
+ });
+})();

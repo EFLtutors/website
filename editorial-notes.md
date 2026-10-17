@@ -54,3 +54,13 @@ Parent quotations from Lauren, Joanna and Katie are reproduced verbatim from the
 The enquiry forms validate inputs locally but send nothing. School enquiries have organisation, role and approximate cohort fields. Class enquiries retain the chosen subject, day, time and £75 monthly price. Connect a form service and privacy notice before enabling submission. Your existing Calendly and email links remain available.
 
 Before launch, confirm availability, billing and cancellation terms, business identity, privacy information, safeguarding arrangements, tutor checks, school procurement requirements and any agreed reporting service. No payment system, CMS or live booking backend is included.
+
+## Resources addition
+
+The approved draft now has a sixth page, Resources. It includes 12 online self-checks with six questions per subject, instant scoring, explanations and topic feedback. This follows your preference for online assessments with feedback. The draft bank contains 72 newly authored starter questions for Maths, Applications of Maths, English, Physics, Chemistry, Biology, History, Geography, Modern Studies, Business Management, Psychology and Media.
+
+The checks use introductory National 5 topics or general subject skills, rather than claiming full qualification coverage. Every page makes clear that a short self-check does not predict an exam grade. Subject tutors should review the question bank before publication. Questions and explanations are editable in `draft-source/assessments.json`.
+
+No personal details are requested; there is no sign-up or email gate. Answers are held in memory for the current attempt, are not transmitted or stored, and are cleared when leaving/reloading the Resources page. A saved website copy excludes the attempt. Recommended next-step links point to the relevant Booster Classes or 1:1 page.
+
+The canonical build source is now saved in this repository under `draft-source/`. Run `python draft-source/build.py` to generate the six normal HTML pages and `preview.html`. The original five-page draft remains available in Git history at commit `0b3fde6`.
