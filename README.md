@@ -1,6 +1,6 @@
 # EFL Tutors website draft
 
-A six-page static website with your original blue-and-gold identity and founder photos:
+A six-page static website with the shorter EFL Tutors identity, original blue and gold, founder photos and a clearer parent journey:
 
 - `index.html` — homepage, founder story, testimonials and company statistics
 - `booster-classes.html` — £75/month classes, timetable, filters and FAQs
@@ -14,6 +14,12 @@ A six-page static website with your original blue-and-gold identity and founder 
 For the complete standalone review copy, open `preview.html` in a browser. All six pages, both founder photos, styling, fonts and assessment content are embedded. `website-preview.zip` contains that file as `OPEN-WEBSITE.html`.
 
 The individual HTML files use shared `assets/`, `styles.css` and `script.js`. Keep those together. To serve the normal site locally, run `python -m http.server 8000` from this directory.
+
+## Parent journey and Google reviews
+
+Booster Classes lead at £75 per month, with premium 1:1 tuition shown alongside. The copy highlights female leadership, neurodivergent-friendly support and online learning across Scotland.
+
+The homepage links to the company’s real Google profile and shows a dated rating verified on 21 October 2026: 5.0/5 from 20 reviews. Visitors can choose to load Google’s official profile inside the page. It is not requested by default. The three existing parent quotations remain website testimonials, not relabelled Google reviews. This is a business-profile embed, not an automatically synchronised review-card feed. See `editorial-notes.md` for the profile identifiers and launch notes.
 
 ## Free assessments
 
@@ -34,7 +40,7 @@ These are **draft questions and indicative difficulty bands for tutor review**, 
 
 Run `python draft-source/build.py` after editing. Refresh the ZIP with the generated `preview.html` before sharing.
 
-Browser checks are in `tests/test_resources.py`. Run `python tests/test_resources.py` with Playwright and Chromium installed. They cover all 72 answer keys, scoring, feedback, answer changes, restart, routing, saved attempts, mobile layouts and keyboard controls.
+Browser checks are in `tests/test_resources.py`. Run `python tests/test_resources.py` with Playwright and Chromium installed. They cover all 72 answer keys, scoring, feedback, answer changes, restart, routing, saved attempts, mobile layouts and keyboard controls. Run `python tests/test_website.py` for six-page navigation, timetable enquiries, five screen widths, photo containment, Google profile opt-in and saved-copy behaviour.
 
 ## Draft status
 

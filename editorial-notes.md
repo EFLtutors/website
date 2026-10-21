@@ -1,74 +1,58 @@
-# EFL Tutors — five-page website draft
+# EFL Tutors — review and launch notes
 
-The approved homepage with your photos is saved separately at `/workspace/website-snapshots/approved-homepage-with-photos.html`. A snapshot of the editable draft before expansion is also retained. No live website changes have been made.
+## This revision
 
-## What is built
+The shorter EFL Tutors name is now visible throughout, with a new text wordmark in the original royal blue (#064280) and gold (#e89b3c). It retains both original founder photographs, the learning philosophy and the existing parent testimonials.
 
-1. **Home:** the approved blue-and-gold design, founder photos, four company metrics, parent testimonials, S1–S6 positioning and Booster Classes as the lead offer.
-2. **Booster Classes:** National 5 Maths, Applications of Maths and English cards; a six-class timetable with subject, day and availability filters; class-specific enquiries and ten Booster Class FAQs.
-3. **1:1 Tutoring:** subjects and prices by qualification, premium positioning, tutor matching, a real parent testimonial and six FAQs.
-4. **Schools & Partners:** possible areas of collaboration, a proposed working process, a separate school enquiry form and FAQs. The page invites future conversations and does not claim existing contracts, provider approval or agreed services.
-5. **Our Approach:** the original site's practice → understanding → confidence philosophy, lesson principles, individual learning needs and links to the two tuition options.
+The homepage now follows a clearer parent journey: introduction and visible £75 Booster Class price, company figures, two tuition choices, reviews, EFL's approach, Emily's story, common parent concerns, school stages, getting started, schools and FAQs. The lead choice is weekly small-group Booster Classes; premium 1:1 tuition is the second option. Female-led, neurodivergent-friendly and Scotland-wide positioning uses the owner's supplied facts.
 
-## Opening and saving
+Central Tutors (https://centraltutors.co.uk/) and Educamus (https://educamus.co.uk/?view=home) were reviewed on 21 October 2026 for clear choices, visible prices, review placement and parent-friendly explanations. Their copy, photographs, outcomes and credentials were not imported. Central Tutors now also advertises group tuition: EFL's positioning should not claim group tuition is unique to EFL.
 
-Download `index.html` and open it in a browser. This is a self-contained review copy: all five pages, styling, fonts and your two photos are embedded. The navigation switches between distinct pages inside that file. **Save Website** saves all five pages and your current photo choices together.
+## Google business profile and reviews
 
-The `site/` directory is a conventional static website containing five separate HTML pages, shared CSS, JavaScript, fonts and images. Open `site/index.html` after extracting the ZIP, or serve that directory with a static web server. The static pages use normal links and show only their own content. The photo editing toolbar is present only in the review copy.
+The owner supplied https://share.google/X8bbJVbUG5ptDFynB, which resolves to **Edinburgh, Fife and Lothians Tutors**. Google's official business-profile embed was checked on **21 October 2026** and showed **5.0/5 from 20 reviews**, with EFL's existing website linked.
 
-The editable source is `source.html`, `styles.css`, `script.js` and `assets/` (or `site/assets/` in the packaged download). Run `python build-standalone.py` to rebuild both outputs. The original live website remains unchanged.
+- Google Maps CID: `12299693131977025457`
+- Place ID: `ChIJ_wwbh-nHh0gRsWfNqbxJsao`
+- Profile: https://www.google.com/maps?cid=12299693131977025457
+- Official embed: https://www.google.com/maps?cid=12299693131977025457&output=embed
 
-## Prices and timetable
+The homepage includes a dated rating summary, a real Google link and an optional embedded Google business profile. Opening the embedded profile connects to Google; it does not load before the visitor chooses it. Closing it, navigating away in the standalone copy, or saving a copy removes its active URL. Its Google-provided rating and reviews link require an internet connection.
 
-All Booster Classes are **£75 per student per month**, following your latest instruction. The old £675 total and nine-payment wording have been removed. A minimum commitment, billing dates, joining rules and cancellation terms have not been invented; agree and publish those before enrolment.
+This is an official profile embed, not an automatically synchronised carousel of individual Google review quotations. The three text testimonials remain attributed to the original EFL website. Lauren, Joanna and Katie's quotations are reproduced verbatim and are not labelled as Google reviews. The dated rating outside the embed must be rechecked before launch and when updated. A live review-card feed would require a chosen supported review provider or an approved API integration.
 
-The existing site was checked on 17 October 2026. Its timetable lists:
+The business profile retains the original regional name; the website explains EFL Tutors is the shorter name for the same business. Coordinate any public rebrand of the Google profile separately.
 
-| Day | Start, UK local time | National 5 subject | Enquiry status in the draft |
-| --- | --- | --- | --- |
-| Sunday | 2:30 pm | English | Enquiries open |
-| Sunday | 4:00 pm | Applications of Maths | Enquiries open |
-| Sunday | 6:00 pm | Maths | Enquiries open |
-| Monday | 6:00 pm | Maths | Waiting list |
-| Tuesday | 6:00 pm | Chemistry | Waiting list |
-| Tuesday | 7:30 pm | Applications of Maths | Waiting list |
+## Pricing and availability
 
-Source: `/programmes.html`. Classes are described there as weekly 75-minute online sessions, typically with 4–8 students. Times use Europe/London so they follow UK daylight saving. These are copied schedule details, not live inventory. Current dates and availability must be confirmed before booking. The draft avoids guaranteeing spaces and does not accept payments.
+Every Booster Class is **£75 per student per month**, as instructed. Classes are described on the existing site as weekly 75-minute online sessions, typically 4–8 students, through the school year.
 
-Premium 1:1 prices from `/tutoring.html`: National 5 from £40/hour, Higher from £45/hour, Advanced Higher from £50/hour. Subjects are copied by qualification level. S1–S3 support is offered as an enquiry with pricing to be discussed.
+The copied timetable retains six distinct classes: Sunday 2:30pm English; Sunday 4pm Applications of Maths; Sunday 6pm Maths; Monday 6pm Maths; Tuesday 6pm Chemistry; Tuesday 7:30pm Applications of Maths. All are National 5, with times in Europe/London. Availability is a draft copied from the original website, not live inventory. Confirm the timetable, current capacity, joining arrangements, billing dates and cancellation terms before publication.
 
-## Founder photos and clarity
+1:1 prices from the original website checked 17 October 2026: National 5 from £40/hour, Higher from £45/hour, Advanced Higher from £50/hour. Ask about S1–S3 pricing and availability. No payment system or booking backend has been added.
 
-Both original photos were extracted from your uploaded saved HTML at **4016 × 6016 pixels** and retained without recompression. They are embedded at full resolution in the review copy and provided as original JPEGs in the static site. Images remain clipped inside their fixed boxes. The **Photo fit** selector lets you choose between filling the box and showing the whole photograph, without stretching the image.
+## Founder photos and content
 
-**Change Hero Photo** and **Change Professional Portrait** update the two slots independently. **Restore Saved Photos** can retrieve the two embedded photographs from a previous saved HTML file. It reads image data only and does not execute scripts from that file.
+Both original photographs remain at **4016 × 6016 pixels**, without recompression. The hero and professional portrait remain in independent fixed photo frames. Preview photo controls allow either slot to be changed, imported from a saved HTML copy, and exported with all six pages. The two additional founder-photo placeholders remain in the expandable behind-the-scenes area. They are clearly placeholders.
 
-Optional AI clarity edits were tried and saved separately in `/workspace/website-snapshots/clarity-options/`. They can change fine detail and are smaller than the originals, so the website uses your original photos by default. Those alternatives have not replaced the originals.
+Emily's introduction is draft copy based on the existing website and company facts, for her review. School partnerships are a future ambition, not an existing-contract claim.
 
-## Content and remaining launch inputs
+## Figures, team and safeguarding
 
-The 500+ students, 2020 founding year, 95% pass rate and 65% neurodivergent/additional-support-needs figure come from your instructions. Add the cohort, denominator, qualifications and date range for the pass rate, and the population and period behind the 65% figure before publication.
+500+ students, founding in 2020, 95% pass rate and 65% neurodivergent/additional-support-needs students were supplied by the owner. Add the relevant cohort, qualifications, denominator and dates for the 95% figure, and population/period for the 65% figure before launch. A visible draft footnote records that these definitions are still needed.
 
-Parent quotations from Lauren, Joanna and Katie are reproduced verbatim from the original site. The founder's first-person introduction is drafted from existing site content and your figures; review its wording.
+Safeguarding and team copy uses owner-supplied facts: every tutor holds a PVG; some are GTC Scotland-registered teachers; the team also includes professionals and experienced graduates. Selection considers student connection, subject knowledge and shared values. TutorCruncher supports organisation and oversight; no unconfirmed software features, automatic checks or session recording are asserted. Finalise and publish the safeguarding policy and relevant contact arrangements.
 
-The enquiry forms validate inputs locally but send nothing. School enquiries have organisation, role and approximate cohort fields. Class enquiries retain the chosen subject, day, time and £75 monthly price. Connect a form service and privacy notice before enabling submission. Your existing Calendly and email links remain available.
+## Free assessments
 
-Before launch, confirm availability, billing and cancellation terms, business identity, privacy information, safeguarding arrangements, tutor checks, school procurement requirements and any agreed reporting service. No payment system, CMS or live booking backend is included.
+The Resources page retains 12 online subject self-checks and 72 questions. Every assessment has two easy (C/D-style), two medium (B-style) and two hard (A-style) questions. These are indicative difficulty bands for tutor review, not official grade allocations or grade predictions. Maths includes indices and circle geometry in place of averages and probability, with an accessible circle diagram.
 
-## Resources addition
+No personal details are requested, and no answers are submitted or stored. Attempts clear when leaving/reloading Resources and are excluded from saved review copies. Have subject tutors approve questions, distractors, difficulty and explanations before publishing.
 
-The approved draft now has a sixth page, Resources. It includes 12 online self-checks with six questions per subject, instant scoring, explanations and topic feedback. This follows your preference for online assessments with feedback. The draft bank contains 72 newly authored starter questions for Maths, Applications of Maths, English, Physics, Chemistry, Biology, History, Geography, Modern Studies, Business Management, Psychology and Media.
+## Review, build and launch
 
-The checks use introductory National 5 topics or general subject skills, rather than claiming full qualification coverage. Every page makes clear that a short self-check does not predict an exam grade. Subject tutors should review the question bank before publication. Questions and explanations are editable in `draft-source/assessments.json`.
+The canonical source is `draft-source/source.html`, `draft-source/assessments.json`, `styles.css` and `script.js`. Run `python draft-source/build.py` to generate the six normal pages and self-contained `preview.html`. `website-preview.zip` contains the standalone file as `OPEN-WEBSITE.html` and brief opening instructions.
 
-No personal details are requested; there is no sign-up or email gate. Answers are held in memory for the current attempt, are not transmitted or stored, and are cleared when leaving/reloading the Resources page. A saved website copy excludes the attempt. Recommended next-step links point to the relevant Booster Classes or 1:1 page.
+The standalone copy opens without a server. Google's optional embedded profile and external booking links require internet. The normal pages use shared assets; keep their folders together. Local development: `python -m http.server 8000` from the repository root. Acceptance checks: `python tests/test_resources.py` and `python tests/test_website.py` with Python Playwright and Chromium installed.
 
-The canonical build source is now saved in this repository under `draft-source/`. Run `python draft-source/build.py` to generate the six normal HTML pages and `preview.html`. The original five-page draft remains available in Git history at commit `0b3fde6`.
-
-## Progressive difficulty and team update
-
-Each assessment now has two easy (C/D-style), two medium (B-style) and two hard (A-style) questions, in that order. These are indicative challenge bands for tutor review, not officially graded questions or predicted examination grades. Later questions have been revised to require application, multiple steps or evaluation. Feedback reports performance in each pair, without converting the result into a grade.
-
-Maths replaces averages and probability with fractional indices and circle geometry. The final circle question combines the perpendicular bisector of a chord, Pythagoras and triangle area, with an accessible SVG diagram. Topic alignment was checked against the National 5 Mathematics course specification: https://www.sqa.org.uk/files_ccc/n5-course-spec-mathematics.pdf (indices and surds; the relationship between centre, chord and perpendicular bisector). This is topic alignment, not official approval or difficulty calibration of the authored questions.
-
-New company-supplied team and safeguarding facts are incorporated into Our Approach, the homepage, 1:1 tuition, the Schools & Partners FAQ and footer links. Every tutor holds a PVG; some are GTC Scotland-registered teachers; the team also includes subject professionals and experienced graduates. Tutors are selected for connection with students, specialist knowledge and values aligned with EFL Tutors. TutorCruncher supports organisation and oversight as part of the safeguarding approach. The wording does not assert specific TutorCruncher features, session recording, automatic checks, a designated safeguarding lead or a formal policy not supplied in this conversation.
+Enquiry forms remain clearly labelled local previews and send nothing. The existing email and Calendly consultation links remain available. Before launch, connect enquiries and privacy information, confirm policies and commercial terms, approve editorial claims and questions, and agree school delivery arrangements as needed. The live website has not been changed.

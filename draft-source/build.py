@@ -1,4 +1,4 @@
-"""Build a self-contained review copy and a conventional five-page static site."""
+"""Build a self-contained review copy and a conventional six-page static site."""
 from pathlib import Path
 from html.parser import HTMLParser
 import base64,mimetypes,re,shutil,json,html as html_utils
@@ -44,6 +44,8 @@ class SinglePage(HTMLParser):
    self.parts.append('<body'+''.join(' '+k+(('="'+html_utils.escape(v,quote=True)+'"') if v is not None else '') for k,v in d.items())+'>')
   elif d.get('data-page')==self.page:self.parts.append(self.get_starttag_text().replace(' hidden',''))
   else:self.parts.append(self.get_starttag_text())
+ def handle_startendtag(self,t,attrs):
+  if not self.skip:self.parts.append(self.get_starttag_text())
  def handle_endtag(self,t):
   if self.skip:
    if t not in void:self.skip-=1

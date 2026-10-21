@@ -175,6 +175,7 @@ if (isPreview && saveWebsite) {
   copy.querySelector('#photo-status').textContent='';copy.querySelector('#enquiry').removeAttribute('open');copy.querySelector('#enquiry-status').textContent='';
   const assessment=copy.querySelector('#free-assessment');if(assessment)assessment.hidden=true;
   ['question-options','assessment-answer-review','assessment-score','assessment-summary-copy','assessment-topics','assessment-band-results','assessment-announcement','question-prompt','question-diagram','question-difficulty'].forEach(id=>{const node=copy.querySelector('#'+id);if(node)node.textContent='';});
+  const googleProfile=copy.querySelector('#google-profile');if(googleProfile){googleProfile.hidden=true;googleProfile.querySelector('iframe').removeAttribute('src');copy.querySelector('#load-google-profile').setAttribute('aria-expanded','false');copy.querySelector('#load-google-profile').textContent='Show Google Profile Here ↓';}
   copy.querySelector('#navigation').classList.remove('open');copy.querySelector('.menu-toggle').setAttribute('aria-expanded','false');
   copy.querySelectorAll('input,textarea').forEach(input=>{input.removeAttribute('value');if(input.tagName==='TEXTAREA')input.textContent='';});
   document.querySelectorAll('select[id]').forEach(select=>{const target=copy.querySelector('#'+select.id);if(target)[...target.options].forEach(option=>option.toggleAttribute('selected',option.value===select.value));});
@@ -332,4 +333,24 @@ if (isPreview && saveWebsite) {
  window.addEventListener('efl-page-change',event=>{
   if (event.detail.page !== 'resources') {active = null;answers = [];section.hidden = true;}
  });
+})();
+
+
+// Load Google's official business profile only when a parent chooses to open it.
+// Keep the source rating dated; this is not an automatic review feed.
+(() => {
+ const button=document.getElementById('load-google-profile');
+ const profile=document.getElementById('google-profile');
+ if(!button || !profile)return;
+ const frame=profile.querySelector('iframe');
+ function closeProfile(){
+  frame.removeAttribute('src');profile.hidden=true;
+  button.setAttribute('aria-expanded','false');button.textContent='Show Google Profile Here ↓';
+ }
+ button.addEventListener('click',()=>{
+  if(!profile.hidden){closeProfile();return;}
+  profile.hidden=false;frame.src=frame.dataset.src;
+  button.setAttribute('aria-expanded','true');button.textContent='Hide Google Profile ↑';
+ });
+ window.addEventListener('efl-page-change',closeProfile);
 })();
