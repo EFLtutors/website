@@ -9,6 +9,7 @@ menuButton.addEventListener('click', () => {
  const open = menuButton.getAttribute('aria-expanded') !== 'true';
  menuButton.setAttribute('aria-expanded', String(open)); navigation.classList.toggle('open', open);
 });
+document.addEventListener('keydown',event=>{if(event.key==='Escape' && menuButton.getAttribute('aria-expanded')==='true'){closeMenu();menuButton.focus();}});
 const pageNames = {home:'Home', 'booster-classes':'Booster Classes', tutoring:'1:1 Tutoring', 'schools-partners':'Schools & Partners', 'our-approach':'Our Approach', 'quick-checks':'Quick Checks'};
 let currentPage = document.body.dataset.startPage || 'home';
 function renderPage(page, anchor = '', moveFocus = true) {
@@ -21,7 +22,10 @@ function renderPage(page, anchor = '', moveFocus = true) {
   if (link.dataset.route === page) link.setAttribute('aria-current', 'page');
   else link.removeAttribute('aria-current');
  });
- document.title = pageNames[page] + ' | EFL Tutors';
+ if (isPreview) {
+  const metadata=JSON.parse(document.getElementById('page-metadata').textContent)[page];
+  document.title=metadata.title;document.querySelector('meta[name="description"]').content=metadata.description;
+ }
  closeMenu();
  if (moveFocus) {
   const target = anchor ? document.getElementById(anchor) : panel.querySelector('h1');
@@ -101,26 +105,93 @@ if (subjectFilter) {
  });
 }
 
-// Preview enquiries: no requests or messages are sent.
+// Enquiry handoff: existing WhatsApp and email routes, never a fake delivery receipt.
 const dialog = document.getElementById('enquiry');
 const form = document.getElementById('enquiry-form');
 const status = document.getElementById('enquiry-status');
+const ready = document.getElementById('enquiry-ready');
+const emailLink = document.getElementById('enquiry-email-link');
+let enquiryContext = '';
+function clearEnquiryDraft() {
+ ready.hidden=true;document.getElementById('enquiry-preview').value='';
+ emailLink.href='mailto:hello@edinburghfifeandlothianstutors.co.uk';status.textContent='';
+}
 document.querySelectorAll('[data-enquiry]').forEach(button => button.addEventListener('click', () => {
- form.reset();status.textContent = '';
- document.getElementById('enquiry-title').textContent = button.dataset.enquiry;
- const school = button.dataset.enquiry === 'School Partnership';
+ form.reset();clearEnquiryDraft();enquiryContext=button.dataset.enquiry;
+ document.getElementById('enquiry-title').textContent = enquiryContext;
+ const school = enquiryContext === 'School Partnership';
+ document.getElementById('enquiry-intro').textContent=school?'Tell us about your learners, subject priorities and proposed support. Please avoid identifiable pupil information.':'Ask about the subject, year group and support your child needs. We’ll discuss suitable options and availability.';
  document.getElementById('school-fields').hidden = !school;document.getElementById('parent-fields').hidden = school;
  document.getElementById('school-name').required = school;
  document.getElementById('enquiry-stage').value = school ? 'School or education partner' : '';
  const choice = document.getElementById('class-choice');
  choice.textContent = button.dataset.classSlot || '';choice.hidden = !button.dataset.classSlot;
  if (button.dataset.classSlot) document.getElementById('enquiry-stage').value = 'S4';
- dialog.showModal();
+ document.getElementById('enquiry-whatsapp').href='https://wa.me/447803375101?text='+encodeURIComponent('Hello EFL Tutors, I would like to ask about '+(button.dataset.classSlot || enquiryContext)+'.');
+ dialog.showModal();document.getElementById('enquiry-title').focus();
 }));
 document.querySelector('.close-dialog').addEventListener('click', () => dialog.close());
+dialog.addEventListener('close',()=>{form.reset();clearEnquiryDraft();});
+form.addEventListener('input',clearEnquiryDraft);
 form.addEventListener('submit', event => {
- event.preventDefault();status.textContent = 'Preview complete. Your enquiry has not been sent. Use the consultation link or email on the page to contact EFL Tutors.';
+ event.preventDefault();
+ if(!form.reportValidity())return;
+ const value=id=>document.getElementById(id).value.trim();
+ const lines=['Hello EFL Tutors,','',enquiryContext];
+ const slot=document.getElementById('class-choice');if(!slot.hidden)lines.push(slot.textContent);
+ lines.push('Name: '+value('contact-name'));
+ if(value('contact-email'))lines.push('Reply email: '+value('contact-email'));
+ if(!document.getElementById('school-fields').hidden){
+  lines.push('Organisation: '+value('school-name'));
+  if(value('school-role'))lines.push('Role: '+value('school-role'));
+  if(value('school-pupils'))lines.push('Approximate students: '+value('school-pupils'));
+ }else if(value('enquiry-stage'))lines.push('Year group: '+value('enquiry-stage'));
+ lines.push('',value('message'));
+ const body=lines.join('\n');
+ document.getElementById('enquiry-preview').value=body;
+ emailLink.href='mailto:hello@edinburghfifeandlothianstutors.co.uk?subject='+encodeURIComponent('EFL Tutors enquiry — '+enquiryContext)+'&body='+encodeURIComponent(body);
+ ready.hidden=false;
+ status.textContent='Your draft is ready. Open it in your email app, or copy it and email us. Nothing has been sent.';
+ emailLink.focus();
 });
+document.getElementById('copy-enquiry').addEventListener('click',async()=>{
+ const text=document.getElementById('enquiry-preview').value;
+ try{
+  if(!navigator.clipboard)throw new Error('Clipboard unavailable');
+  await navigator.clipboard.writeText(text);
+  status.textContent='Enquiry copied. Paste it into an email to hello@edinburghfifeandlothianstutors.co.uk. Nothing has been sent.';
+ }catch{
+  const preview=document.getElementById('enquiry-preview');preview.focus();preview.select();
+  status.textContent='Automatic copying is unavailable. Your draft is selected; copy it using your keyboard or device menu.';
+ }
+});
+
+// The configured TutorCruncher widget is available only from its allowed live origin.
+// A same-origin frame isolates provider state and is discarded when the dialog closes.
+(() => {
+ const option=document.getElementById('online-enquiry-option');if(!option)return;
+ const button=document.getElementById('load-online-enquiry');
+ const frame=document.getElementById('online-enquiry-frame');
+ const note=document.getElementById('online-enquiry-status');
+ const eligible=!isPreview && location.origin===option.dataset.origin;
+ function updateAvailability(){option.hidden=!eligible || document.getElementById('enquiry-title').textContent==='School Partnership';}
+ function reset(){frame.removeAttribute('src');frame.hidden=true;button.disabled=false;note.textContent='';}
+ button.addEventListener('click',()=>{
+  if(!eligible)return;
+  button.disabled=true;frame.hidden=false;frame.src=frame.dataset.src;note.textContent='Loading the online enquiry form…';
+ });
+ document.querySelectorAll('[data-enquiry]').forEach(trigger=>trigger.addEventListener('click',updateAvailability));
+ dialog.addEventListener('close',()=>{reset();option.hidden=true;});
+ window.addEventListener('message',event=>{
+  if(event.origin!==location.origin || event.source!==frame.contentWindow || !event.data)return;
+  if(event.data.type==='efl-enquiry-height' && Number.isFinite(event.data.height))frame.style.height=Math.min(1800,Math.max(350,event.data.height))+'px';
+  if(event.data.type==='efl-enquiry-status'){
+   const states={ready:'Online form ready. Please include an email or phone number.',submitted:'Your enquiry has been submitted to EFL Tutors.',unavailable:'The online form is unavailable. Please use WhatsApp or prepare an email below.'};
+   if(states[event.data.state])note.textContent=states[event.data.state];
+   if(event.data.state==='unavailable')button.disabled=false;
+  }
+ });
+})();
 
 // Photo editing exists only in the standalone review copy.
 const saveWebsite = document.getElementById('save-website');
@@ -173,13 +244,14 @@ if (isPreview && saveWebsite) {
  });
  saveWebsite.addEventListener('click', () => {
   const copy=document.documentElement.cloneNode(true);
-  copy.querySelector('#photo-status').textContent='';copy.querySelector('#enquiry').removeAttribute('open');copy.querySelector('#enquiry-status').textContent='';
+  copy.querySelector('#photo-status').textContent='';copy.querySelector('#enquiry').removeAttribute('open');copy.querySelector('#enquiry-status').textContent='';copy.querySelector('#enquiry-ready').hidden=true;copy.querySelector('#enquiry-email-link').href='mailto:hello@edinburghfifeandlothianstutors.co.uk';copy.querySelector('#enquiry-whatsapp').href='https://wa.me/447803375101';copy.querySelector('#class-choice').textContent='';copy.querySelector('#class-choice').hidden=true;
+  const online=copy.querySelector('#online-enquiry-option');if(online){online.hidden=true;copy.querySelector('#online-enquiry-frame').removeAttribute('src');copy.querySelector('#online-enquiry-frame').hidden=true;copy.querySelector('#online-enquiry-status').textContent='';copy.querySelector('#load-online-enquiry').disabled=false;}
   const assessment=copy.querySelector('#free-assessment');if(assessment)assessment.hidden=true;
   ['question-options','assessment-answer-review','assessment-score','assessment-summary-copy','assessment-topics','assessment-band-results','assessment-announcement','question-prompt','question-diagram','question-difficulty'].forEach(id=>{const node=copy.querySelector('#'+id);if(node)node.textContent='';});
   const googleProfile=copy.querySelector('#google-profile');if(googleProfile){googleProfile.hidden=true;googleProfile.querySelector('iframe').removeAttribute('src');copy.querySelector('#load-google-profile').setAttribute('aria-expanded','false');copy.querySelector('#load-google-profile').textContent='Show Google Profile Here ↓';}
   copy.querySelector('#navigation').classList.remove('open');copy.querySelector('.menu-toggle').setAttribute('aria-expanded','false');
   copy.querySelectorAll('input,textarea').forEach(input=>{input.removeAttribute('value');if(input.tagName==='TEXTAREA')input.textContent='';});
-  document.querySelectorAll('select[id]').forEach(select=>{const target=copy.querySelector('#'+select.id);if(target)[...target.options].forEach(option=>option.toggleAttribute('selected',option.value===select.value));});
+  document.querySelectorAll('select[id]').forEach(select=>{const target=copy.querySelector('#'+select.id);if(target)[...target.options].forEach(option=>option.toggleAttribute('selected',option.value===(select.closest('#enquiry-form')?'':select.value)));});
   copy.querySelector('body').dataset.startPage=currentPage;
   const blob=new Blob(['<!doctype html>\n',copy.outerHTML],{type:'text/html;charset=utf-8'});
   const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='efl-tutors-complete-website.html';document.body.append(link);link.click();link.remove();

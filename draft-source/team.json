@@ -1,0 +1,55 @@
+[
+  {
+    "id": "florence",
+    "name": "Florence",
+    "role": "Lead Tutor",
+    "bio": "An experienced tutor and our Lead Tutor, Florence builds trust with families. She supports learners with low confidence, anxiety, neurodivergence or difficulties at school, and takes time to understand what helps each student.",
+    "subjects": [
+      "Maths",
+      "English",
+      "History",
+      "Geography"
+    ],
+    "levels": [],
+    "photo": null,
+    "pvg": true,
+    "source": "Owner-approved role, subjects and biography, 21 October 2026. Qualification levels and portrait still to confirm.",
+    "summary": "Florence helps learners who lack confidence or find school difficult, and builds strong relationships with families."
+  },
+  {
+    "id": "michael",
+    "name": "Michael",
+    "role": "Tutor",
+    "bio": "A friendly, approachable secondary-school teacher, Michael brings classroom experience and knowledge of SQA exam marking to his tutoring.",
+    "subjects": [
+      "Chemistry",
+      "Maths"
+    ],
+    "levels": [],
+    "photo": null,
+    "pvg": true,
+    "source": "Owner-approved subjects, current teacher registration, marking role and biography, 21 October 2026. Qualification levels and portrait still to confirm.",
+    "credentials": [
+      "GTC Scotland-registered secondary teacher",
+      "SQA exam marker"
+    ]
+  },
+  {
+    "id": "neel",
+    "name": "Neel",
+    "role": "Tutor",
+    "bio": "A medical student at the University of St Andrews and a swimming instructor, Neel brings empathy, strong rapport with students and an understanding of the senior-school experience.",
+    "subjects": [
+      "Biology",
+      "Chemistry"
+    ],
+    "levels": [],
+    "photo": null,
+    "pvg": true,
+    "source": "Owner-approved subjects, study/employment roles and biography, 21 October 2026. Qualification levels and portrait still to confirm.",
+    "credentials": [
+      "Medical student, University of St Andrews",
+      "Swimming instructor"
+    ]
+  }
+]

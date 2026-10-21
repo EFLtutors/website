@@ -1,61 +1,61 @@
-# EFL Tutors website draft
+# EFL Tutors website
 
-A six-page static website with the shorter EFL Tutors identity, original blue and gold, founder photos and a clearer parent journey:
+An existing six-page static site, refined rather than rebuilt: blue and gold, authentic founder photos, Booster Classes first, personal 1:1 tuition, named team, parent feedback and free Quick Checks.
 
-- `index.html` — homepage, founder story, testimonials and company statistics
-- `booster-classes.html` — £75/month classes, timetable, filters and FAQs
-- `tutoring.html` — 1:1 subjects, prices and FAQs
-- `schools-partners.html` — prospective partnerships and a school enquiry preview
-- `our-approach.html` — teaching philosophy
-- `quick-checks.html` — 12 free online subject Quick Checks with feedback downloads
+## Run and build
 
-`resources.html` remains as a compatibility copy for previously shared links. There are still six logical pages.
+From this repository:
 
-## Review the website
+```sh
+python draft-source/build.py
+python -m http.server 8000
+```
 
-For the complete standalone review copy, open `preview.html` in a browser. All six pages, both founder photos, styling, fonts and assessment content are embedded. `website-preview.zip` contains that file as `OPEN-WEBSITE.html`.
+Normal builds use Python's standard library. Public HTML files share `styles.css`, `components.css`, `script.js` and `assets/`. `enquiry-widget.html`/`enquiry-widget.js` serve the optional Socket frame. Keep them together. `resources.html` is a compatibility copy of Quick Checks, so there are still six logical pages.
 
-The individual HTML files use shared `assets/`, `styles.css` and `script.js`. Keep those together. To serve the normal site locally, run `python -m http.server 8000` from this directory.
+`preview.html` is a standalone editor with all pages, original founder photos, fonts and Quick Checks embedded. `website-preview.zip` contains it as `OPEN-WEBSITE.html`. Opening, photo replacement and Save Website need no server. External contact/booking/Google links need internet.
 
-## Parent journey and Google reviews
+## Edit
 
-Booster Classes lead at £75 per month, with premium 1:1 tuition shown alongside. The copy highlights female leadership, neurodivergent-friendly support and online learning across Scotland. Longer testimonials and lesson explanations expand on request.
+| File | Purpose |
+| --- | --- |
+| `draft-source/source.html` | Existing layout and shared copy |
+| `draft-source/team.json` | Approved team details; empty fields are intentionally unclaimed |
+| `draft-source/testimonials.json` | Full genuine quotations, verbatim excerpts and source/context |
+| `draft-source/assessments.json` | 12 subject Quick Checks; 72 questions and explanations |
+| `draft-source/content.py` | Escaped reusable content rendering |
+| `draft-source/site.json` | Intended domain, indexing switch, public Socket key and optional hosted enquiry URL |
+| `styles.css` | Existing brand/theme |
+| `components.css` | Refined components, contact dialog and accessibility |
+| `script.js` | Navigation, contact handoff, photos, timetable and Quick Checks |
 
-The homepage links to the company’s real Google profile and shows a dated rating verified on 21 October 2026: 5.0/5 from 20 reviews. Visitors can choose to load Google’s official profile inside the page. It is not requested by default. The three existing parent quotations remain website testimonials, not relabelled Google reviews. This is a business-profile embed, not an automatically synchronised review-card feed. See `editorial-notes.md` for the profile identifiers and launch notes.
+Rebuild after editing. Run `python draft-source/package.py` to rebuild both download ZIPs: `website-preview.zip` for review and `public-site.zip` for conventional static hosting. The public ZIP does not include the editor or large original JPEGs. Public founder photos use committed WebP derivatives. Optional regeneration uses `python draft-source/optimise_images.py` (Pillow required only for this asset-preparation step). The original JPEGs remain untouched. `draft-source/social-preview.html` is the source of the social sharing image.
 
-## Quick Checks
+## Contact and privacy behaviour
 
-The Quick Checks page has six-question starter checks for Maths, Applications of Maths, English, Physics, Chemistry, Biology, History, Geography, Modern Studies, Business Management, Psychology and Media.
+WhatsApp uses the owner-confirmed **07803 375101**. Class enquiries include the selected class in a draft, not an automatic message. Email enquiries validate details and prepare a `mailto:` draft with a manual-copy fallback. Nothing is sent automatically. **TutorCruncher Socket is configured** using the owner-supplied public key. On the permitted production origin, parents can explicitly load its official callback form with required CAPTCHA. It is isolated in a frame, discarded on close, and its default analytics is disabled. Local/downloaded previews retain WhatsApp/email because their origins are not allowed by TutorCruncher. The current provider form lacks subject/year-group/message fields and leaves contact details optional; finish those settings and a controlled delivery test before launch. See the handover for exact requirements.
 
-Parents and students can choose a subject, answer at their own pace, return to change answers, then see a score for those six questions, explanations and topics worth revisiting. No account, email, payment, automatic storage or answer submission is involved. Families can explicitly download a dated text feedback file to keep or share with their tutor. Assessments reset when leaving/reloading the page; saved website copies exclude attempts.
+Quick Checks run in the tab, without personal details, storage or answer submission. Save My Feedback creates a local file. Repeating the same six questions is practice, not proof of improvement. Attempts and contact details are excluded from saved website copies.
 
-Each self-check starts with **two easy (C/D-style)** questions, followed by **two medium (B-style)** and **two hard (A-style)** questions. The questions include application and reasoning, not just recall. Maths now includes indices and circle geometry in place of averages and probability.
+Google's dated rating is separate from the three existing website testimonials. Its optional official profile embed loads only when opened. No first-party analytics has been added.
 
-These are **draft questions and indicative difficulty bands for tutor review**, using National 5-style topics or general subject skills. The bands are not official grade allocations. They do not cover every course unit and do not predict an exam grade. Repeating the same six questions is practice, not independent evidence of improvement; review progress with fresh questions and tutor feedback. Have subject tutors approve questions, distractors and explanations before publishing.
+## Checks
 
-## Editing and rebuilding
+Requires Python Playwright and Chromium at `/usr/bin/chromium`:
 
-- `draft-source/source.html` — shared layout and page content
-- `draft-source/assessments.json` — editable questions, choices, correct-answer indexes and explanations
-- `styles.css` and `script.js` — shared styling and interactions
-- `draft-source/build.py` — generates all six pages and the standalone preview
+```sh
+python tests/test_resources.py
+python tests/test_website.py
+python tests/test_enquiries.py
+python tests/test_tutorcruncher.py
+node --check script.js
+node --check enquiry-widget.js
+```
 
-Run `python draft-source/build.py` after editing. Refresh the ZIP with the generated `preview.html` before sharing.
+The first suite covers all 72 answers, explanations, scoring, navigation, keyboard use and responsive feedback. The second covers six pages at five widths, photo containment, timetable filters, Google opt-in, old links and Quick Check downloads. The third covers parent/school email drafts and validation, WhatsApp context, copy fallback, private-data export, evidence records and metadata. The Socket suite tests provider loading/failure, origin checks, message validation and state reset with a fixture. Tests do not send messages.
 
-Browser checks are in `tests/test_resources.py`. Run `python tests/test_resources.py` with Playwright and Chromium installed. They cover all 72 answer keys, scoring, feedback, answer changes, restart, routing, saved attempts, mobile layouts and keyboard controls. Run `python tests/test_website.py` for six-page navigation, timetable enquiries, five screen widths, photo containment, Google profile opt-in and saved-copy behaviour.
+## Launch status
 
-## Draft status
+Read [audit-and-handover.md](audit-and-handover.md) for the audit, implementation, evidence register and remaining inputs. Undefined pass-rate/demographic percentages are held out of public copy. Approved subjects and biographies are now populated; individual qualification levels and approved tutor portraits still need confirming. Pricing, timetable, publication permissions and business policies require final review.
 
-Enquiry forms are local previews and send nothing. Timetable details came from the original website and need current availability confirmation. Finalise payment/cancellation terms, business policies and metric definitions before launch. No deployment has been performed.
-
-## Our tutors and safeguarding
-
-Our Approach now includes dedicated team and safeguarding sections, linked from the homepage, 1:1 page and footer. The copy uses the facts supplied by the company: every tutor holds a PVG; some tutors are GTC Scotland-registered teachers; the team includes subject professionals and experienced graduates; selection considers student connection, specialist knowledge and shared values. TutorCruncher is described as supporting organisation and oversight as part of the safeguarding approach. No unconfirmed software features or session-recording claims are included.
-
-## WhatsApp and Quick Check links
-
-The floating WhatsApp button and contact link use the owner-confirmed number **07803 375101**, formatted as `447803375101` for `wa.me`. The floating link pre-fills a general enquiry; the visitor sends it themselves. There is no third-party chat script or automatic messaging.
-
-Quick Checks are signposted from the home, Booster Classes, 1:1 Tutoring, Schools & Partners and Our Approach pages, plus the global navigation and footer. Each of the three featured classes links directly to its matching subject card. Stable destinations are `quick-checks.html#check-maths`, `#check-applications-of-maths` and `#check-english`; the standalone copy uses equivalent hash routes. Previous `resources.html` and `#/resources` links continue to work.
-
-Feedback downloads contain the subject, local save time, score, topics, answers and explanations. They stay with the visitor until the visitor chooses to share them. There is no student account, central results dashboard or automatic longitudinal tracking. Quick Checks support a starting conversation; assessment of progress needs fresh questions and lesson evidence.
+**Draft indexing is disabled.** Confirm `site_url`, then set `indexable: true` and rebuild when the approved public site is ready to launch. The live website has not been deployed or changed.

@@ -82,7 +82,7 @@ try:
   assert '£75' in page.locator('#class-choice').inner_text()
   page.locator('.close-dialog').click()
   page.goto('http://127.0.0.1:8778/preview.html',wait_until='networkidle')
-  page.evaluate('Promise.all([...document.images].filter(i=>i.classList.contains("founder-image")).map(i=>i.decode()))')
+  page.evaluate('Promise.all([...document.images].filter(i=>i.classList.contains("founder-image")).map(i=>{i.loading="eager";return i.decode();}))')
   # Both upload slots keep their fixed dimensions after full-resolution replacements.
   for kind,frame in [('hero','.hero-photo'),('portrait','.founder-photo')]:
    before=page.locator(frame).bounding_box()
@@ -116,7 +116,7 @@ try:
   assert not bad,bad
   print('PASS: timetable enquiries, original-photo uploads, review opt-in/reset and saved offline copy work; no failed local assets or JavaScript errors.',flush=True)
   page.set_viewport_size({'width':1440,'height':1000});page.goto('http://127.0.0.1:8778/index.html',wait_until='networkidle')
-  page.evaluate('Promise.all([...document.images].filter(i=>i.classList.contains("founder-image")).map(i=>i.decode()))')
+  page.evaluate('Promise.all([...document.images].filter(i=>i.classList.contains("founder-image")).map(i=>{i.loading="eager";return i.decode();}))')
   page.screenshot(path='/tmp/efl-home-desktop.png')
   page.locator('#testimonials').scroll_into_view_if_needed();page.screenshot(path='/tmp/efl-reviews-desktop.png')
   page.locator('#founder').scroll_into_view_if_needed();page.screenshot(path='/tmp/efl-founder-desktop.png')
