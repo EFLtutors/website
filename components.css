@@ -142,3 +142,67 @@ footer .footer-grid a { min-height: 32px; }
 .online-enquiry-option { margin-block: 22px; border-top: 1px solid var(--line); padding-top: 20px; }
 .online-enquiry-option iframe { width: 100%; height: 650px; display: block; border: 0; margin-top: 15px; background: white; }
 #online-enquiry-status { font-size: 17px; color: var(--blue); margin-top: 12px; }
+
+/* Homepage: a clear route from a parent's concern to support and a first step. */
+.home-hero h1 { font-size: clamp(37px, 3.5vw, 51px); line-height: 1.15; }
+.hero .hero-subheading { font: 500 23px/1.5 var(--body); color: #edf4fc; letter-spacing: 0; margin-bottom: 25px; max-width: 560px; }
+.hero-help { color: white; display: flex; padding: 0; margin: -6px 0 12px; text-align: left; }
+.home-hero .hero-quote { margin-top: 15px; }
+.parent-support-section { background: #f6f8fb; }
+.parent-support-section .centred-heading { max-width: 780px; }
+.needs-choices { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin: 30px 0; }
+.need-circle { flex: 0 0 132px; min-height: 132px; width: 132px; border-radius: 50%; border: 2px solid #9ab3cd; padding: 16px 10px; background: white; color: var(--blue); font: 700 16px/1.4 var(--body); transition: background .15s, border-color .15s; }
+.need-circle:hover { background: #e7eff8; border-color: var(--blue); }
+.need-circle[aria-pressed="true"] { background: var(--blue); color: white; border-color: var(--gold); }
+.need-circle:focus-visible { outline: 3px solid var(--gold); outline-offset: 5px; }
+.parent-solution { display: grid; grid-template-columns: 1fr 50px 1fr; gap: 24px; align-items: center; padding: 32px; background: white; border-top: 3px solid var(--gold); margin-bottom: 20px; }
+.need-solution h3 { font-size: 26px; line-height: 1.3; margin-bottom: 16px; }
+.parent-solution .eyebrow { font-size: 11px; margin-bottom: 12px; }
+.need-solution p, .need-next-step > p:not(.eyebrow) { font-size: 18px; color: var(--muted); }
+.need-arrow { color: #9c5b0b; font-size: 39px; text-align: center; }
+.need-proof { margin: 0; padding: 0 0 0 28px; border-left: 1px solid var(--line); }
+.need-proof blockquote { font-size: 21px; line-height: 1.6; margin: 0 0 18px; color: var(--blue); }
+.need-proof figcaption { font-size: 14px; color: var(--muted); margin-bottom: 12px; }
+.need-proof figcaption strong { color: var(--blue); }
+.need-next-step { border-left: 1px solid var(--line); padding-left: 28px; }
+.need-next-step h4 { font: 600 22px/1.4 var(--sans); color: var(--blue); margin: 0 0 13px; }
+.need-next-step .text-button { text-align: left; padding: 0; }
+.coverage-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+.coverage-copy h2 { margin-bottom: 24px; }
+.coverage-intro { color: var(--blue); font-size: 23px; line-height: 1.5; }
+.coverage-copy > p:not(.eyebrow):not(.coverage-intro) { color: var(--muted); }
+.learner-levels { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; margin: 25px 0; }
+.learner-levels li { font: 600 13px/1.5 var(--sans); color: var(--blue); background: #edf3f9; padding: 9px 12px; border-bottom: 2px solid var(--gold); }
+.scotland-illustration { margin: 0; }
+.scotland-illustration img { width: 100%; height: auto; }
+.scotland-illustration figcaption { font-size: 14px; color: var(--muted); margin: 12px 0 0; text-align: center; }
+.scotland-section .stages-details { margin-top: 32px; }
+.map-credits { margin-top: 15px; font-size: 12px; color: var(--muted); }
+.map-credits summary { font-family: var(--body); font-size: 12px; min-height: 32px; }
+.map-credits p { font-size: 13px; max-width: 850px; }
+.map-credits a { text-decoration: underline; }
+.start-steps { margin-top: 42px; }
+.start-steps p { font-size: 18px; }
+.home-hero .hero-google-rating { display: flex; width: fit-content; }
+@media (max-width: 1080px) {
+  .coverage-grid { gap: 35px; }
+}
+@media (max-width: 850px) {
+  .parent-solution { grid-template-columns: 1fr; gap: 8px; }
+  .need-arrow { transform: rotate(90deg); width: 40px; margin: auto; }
+  .need-proof, .need-next-step { border-left: 0; padding: 20px 0 0; border-top: 1px solid var(--line); }
+  .coverage-grid { grid-template-columns: 1fr; gap: 32px; }
+  .scotland-illustration { max-width: 500px; margin-inline: auto; }
+}
+@media (max-width: 520px) {
+  .home-hero h1 { font-size: clamp(32px, 8.7vw, 40px); letter-spacing: -.8px; }
+  .hero .hero-subheading { font-size: 21px; line-height: 1.5; }
+  .need-circle { flex-basis: 102px; width: 102px; min-height: 102px; padding: 12px 6px; font-size: 14px; }
+  .needs-choices { gap: 14px; margin-block: 25px; }
+  .parent-solution { padding: 24px 21px; }
+  .need-solution h3 { font-size: 24px; }
+  .need-proof blockquote { font-size: 19px; }
+  .named-team-section .named-team-grid { grid-template-columns: 1fr; }
+  .coverage-intro { font-size: 21px; }
+  .quick-check-banner h2 { font-size: 29px; }
+}

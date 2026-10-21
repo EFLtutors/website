@@ -39,6 +39,26 @@ try:
      page.locator('.menu-toggle').click()
   assert not external,external
   print('PASS: all six pages fit five widths; current-page and mobile navigation work; no unsolicited Google requests.',flush=True)
+  for filename in ['index.html','preview.html#/home']:
+   page.goto('http://127.0.0.1:8778/'+filename,wait_until='networkidle')
+   for button in page.locator('[data-parent-need]').all():
+    button.click()
+    assert button.get_attribute('aria-pressed')=='true'
+    assert page.locator('[data-parent-need][aria-pressed="true"]').count()==1
+    assert page.locator('.parent-solution:visible').count()==1
+    assert page.locator('#'+button.get_attribute('aria-controls')).is_visible()
+   study=page.locator('[data-parent-need="study"]');study.focus();page.keyboard.press('Space')
+   assert page.locator('#support-study').is_visible()
+   assert 'Study skills' in page.locator('#need-announcement').inner_text()
+   assert page.locator('.scotland-illustration img').evaluate('(i)=>{i.loading="eager";return i.decode().then(()=>i.naturalWidth===560)}')
+   page.locator('#support-study a[data-route="quick-checks"]').click()
+   assert page.locator('.site-page:visible').get_attribute('data-page')=='quick-checks'
+  no_js=browser.new_context(java_script_enabled=False)
+  fallback=no_js.new_page();fallback.goto('http://127.0.0.1:8778/index.html')
+  assert fallback.locator('.parent-solution:visible').count()==7
+  assert fallback.locator('.needs-choices').is_hidden()
+  no_js.close()
+  print('PASS: parent-concern choices work with mouse/keyboard in static and standalone copies; support remains available without JavaScript; Scotland map is embedded in the review copy.',flush=True)
   # Old bookmarks continue to open the renamed page.
   page.goto('http://127.0.0.1:8778/resources.html',wait_until='networkidle')
   assert page.locator('.site-page:visible').get_attribute('data-page')=='quick-checks'
@@ -113,7 +133,7 @@ try:
   page.locator('#florence-file').set_input_files(fixture)
   page.wait_for_function('document.querySelectorAll(".florence-portrait").length===2')
   assert page.locator('.founder-image').count()==2
-  for width in [390,1440]:
+  for width in [320,390,1440]:
    page.set_viewport_size({'width':width,'height':1000})
    for target in ['home','our-approach']:
     page.evaluate('(target)=>renderPage(target,"",false)',target)
@@ -153,6 +173,7 @@ try:
   offline.goto('http://127.0.0.1:8778/saved-copy.html',wait_until='networkidle')
   assert offline.locator('.florence-portrait').count()==2
   assert offline.locator('.florence-portrait').first.evaluate('(i)=>i.naturalWidth')==667
+  assert offline.locator('.scotland-illustration img').get_attribute('src').startswith('data:image/svg+xml;base64,')
   offline.close()
   print('PASS: timetable enquiries, original-photo uploads, review opt-in/reset and saved offline copy work; no failed local assets or JavaScript errors.',flush=True)
   page.set_viewport_size({'width':1440,'height':1000});page.goto('http://127.0.0.1:8778/index.html',wait_until='networkidle')

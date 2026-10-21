@@ -83,6 +83,20 @@ tabs.forEach((tab,i) => {
  });
 });
 
+// Parent concerns: expose all support copy without JS; enhance to one selected panel.
+const needsChoices = document.querySelector('.needs-choices');
+if (needsChoices) {
+ const buttons = [...needsChoices.querySelectorAll('[data-parent-need]')];
+ const panels = [...document.querySelectorAll('.parent-solution')];
+ function selectNeed(button, announce = true) {
+  buttons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+  panels.forEach(panel => panel.hidden = panel.id !== button.getAttribute('aria-controls'));
+  if (announce) document.getElementById('need-announcement').textContent = button.textContent + ': ' + document.getElementById(button.getAttribute('aria-controls')).querySelector('h3').textContent;
+ }
+ buttons.forEach(button => button.addEventListener('click', () => selectNeed(button)));
+ selectNeed(buttons[0], false);needsChoices.hidden = false;
+}
+
 // Timetable filters use the published class rows, including confirmed science classes.
 const subjectFilter = document.getElementById('filter-subject');
 if (subjectFilter) {

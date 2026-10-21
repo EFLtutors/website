@@ -21,6 +21,7 @@ Normal builds use Python's standard library. Public HTML files share `styles.css
 | --- | --- |
 | `draft-source/source.html` | Existing layout and shared copy |
 | `draft-source/team.json` | Approved team details; empty fields are intentionally unclaimed |
+| `draft-source/home-support.json` | Parent concerns, support aims and verbatim proof excerpts |
 | `draft-source/testimonials.json` | Full genuine quotations, verbatim excerpts and source/context |
 | `draft-source/assessments.json` | 12 subject Quick Checks; 72 questions and explanations |
 | `draft-source/content.py` | Escaped reusable content rendering |
@@ -61,3 +62,5 @@ Read [audit-and-handover.md](audit-and-handover.md) for the audit, implementatio
 **Draft indexing is disabled.** Confirm `site_url`, then set `indexable: true` and rebuild when the approved public site is ready to launch. The live website has not been deployed or changed.
 
 Latest draft: self-hosted Nunito Sans body text; Monday Physics 6:30 pm and Tuesday Chemistry 6 pm live (£75/month). The standalone toolbar also lets you add Florence’s portrait to both her profiles and save it with the website. The public build still needs her original JPG attachment.
+
+Homepage revision: Scotland-wide hero, Confidence Starts Here service comparison, accessible concern-circle controls, genuine parent proof, illustrated Scotland map, fuller approved tutor summaries and a Quick Check → conversation → agreed support journey. All seven support explanations remain visible without JavaScript. The map is a local SVG, embedded in the standalone copy; attribution is in `assets/scotland-map-attribution.txt` and its on-page credits. Goals are separate from client-reported experiences; there is no invented grade improvement or examination-success statistic.

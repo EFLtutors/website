@@ -32,7 +32,8 @@
     "credentials": [
       "GTC Scotland-registered secondary teacher",
       "SQA exam marker"
-    ]
+    ],
+    "summary": "A friendly, approachable secondary-school teacher, GTC Scotland registered and an SQA exam marker."
   },
   {
     "id": "neel",
@@ -50,6 +51,7 @@
     "credentials": [
       "Medical student, University of St Andrews",
       "Swimming instructor"
-    ]
+    ],
+    "summary": "A medical student at St Andrews, Neel brings empathy, strong rapport and an understanding of senior-school life."
   }
 ]
