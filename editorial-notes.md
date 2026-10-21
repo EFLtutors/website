@@ -1,10 +1,20 @@
 # EFL Tutors — review and launch notes
 
-## This revision
+## Clarity, WhatsApp and Quick Checks update
+
+Resources is now **Quick Checks**, with `quick-checks.html` as the main URL. Old resource URLs and standalone bookmarks remain compatible. Links appear on every main page, and the Booster Classes page has a hero link, matching subject links on all three class cards, a pre-timetable invitation, a short Check → Practise → Review journey and a FAQ.
+
+The owner confirmed **07803 375101** for WhatsApp. The shared floating button opens `https://wa.me/447803375101` with a generic draft enquiry. The contact section also has a direct chat link. No message is sent automatically and no chat script loads on the site.
+
+Longer testimonials now show short verbatim excerpts with the original full quotations available in expandable details. Founder and other explanatory paragraphs are shorter; full lesson explanations are expandable. The homepage has four decision-focused FAQs and a compact Quick Check invitation.
+
+The results screen now offers **Save My Feedback**, producing a dated local text download with score, topics, chosen and correct answers, and explanations. No answers are automatically submitted or retained. There is no central progress dashboard. The copy positions Quick Checks as a starting snapshot for a discussion with a tutor. Repeating the same questions cannot establish independent improvement; meaningful progress review needs fresh questions and tutor feedback. A later validated, versioned question bank and agreed reporting/data arrangements would be required for formal programme-level measurement.
+
+## Previous design direction
 
 The shorter EFL Tutors name is now visible throughout, with a new text wordmark in the original royal blue (#064280) and gold (#e89b3c). It retains both original founder photographs, the learning philosophy and the existing parent testimonials.
 
-The homepage now follows a clearer parent journey: introduction and visible £75 Booster Class price, company figures, two tuition choices, reviews, EFL's approach, Emily's story, common parent concerns, school stages, getting started, schools and FAQs. The lead choice is weekly small-group Booster Classes; premium 1:1 tuition is the second option. Female-led, neurodivergent-friendly and Scotland-wide positioning uses the owner's supplied facts.
+The homepage follows a clearer parent journey: introduction and visible £75 Booster Class price, company figures, two tuition choices, reviews, EFL's approach, Emily's story, Quick Checks, school stages, getting started, schools and FAQs. The lead choice is weekly small-group Booster Classes; premium 1:1 tuition is the second option. Female-led, neurodivergent-friendly and Scotland-wide positioning uses the owner's supplied facts.
 
 Central Tutors (https://centraltutors.co.uk/) and Educamus (https://educamus.co.uk/?view=home) were reviewed on 21 October 2026 for clear choices, visible prices, review placement and parent-friendly explanations. Their copy, photographs, outcomes and credentials were not imported. Central Tutors now also advertises group tuition: EFL's positioning should not claim group tuition is unique to EFL.
 
@@ -45,9 +55,9 @@ Safeguarding and team copy uses owner-supplied facts: every tutor holds a PVG; s
 
 ## Free assessments
 
-The Resources page retains 12 online subject self-checks and 72 questions. Every assessment has two easy (C/D-style), two medium (B-style) and two hard (A-style) questions. These are indicative difficulty bands for tutor review, not official grade allocations or grade predictions. Maths includes indices and circle geometry in place of averages and probability, with an accessible circle diagram.
+The Quick Checks page retains 12 online subject checks and 72 questions. Every assessment has two easy (C/D-style), two medium (B-style) and two hard (A-style) questions. These are indicative difficulty bands for tutor review, not official grade allocations or grade predictions. Maths includes indices and circle geometry in place of averages and probability, with an accessible circle diagram.
 
-No personal details are requested, and no answers are submitted or stored. Attempts clear when leaving/reloading Resources and are excluded from saved review copies. Have subject tutors approve questions, distractors, difficulty and explanations before publishing.
+No personal details are requested, and no answers are submitted or stored. Attempts clear when leaving/reloading Quick Checks and are excluded from saved review copies. Have subject tutors approve questions, distractors, difficulty and explanations before publishing.
 
 ## Review, build and launch
 

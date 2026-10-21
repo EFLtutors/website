@@ -9,7 +9,7 @@ menuButton.addEventListener('click', () => {
  const open = menuButton.getAttribute('aria-expanded') !== 'true';
  menuButton.setAttribute('aria-expanded', String(open)); navigation.classList.toggle('open', open);
 });
-const pageNames = {home:'Home', 'booster-classes':'Booster Classes', tutoring:'1:1 Tutoring', 'schools-partners':'Schools & Partners', 'our-approach':'Our Approach', resources:'Resources'};
+const pageNames = {home:'Home', 'booster-classes':'Booster Classes', tutoring:'1:1 Tutoring', 'schools-partners':'Schools & Partners', 'our-approach':'Our Approach', 'quick-checks':'Quick Checks'};
 let currentPage = document.body.dataset.startPage || 'home';
 function renderPage(page, anchor = '', moveFocus = true) {
  const panel = document.querySelector('[data-page="' + page + '"]');
@@ -33,7 +33,8 @@ function renderPage(page, anchor = '', moveFocus = true) {
 }
 function routeFromLocation(moveFocus) {
  if (location.hash.startsWith('#/')) {
-  const [page, anchor = ''] = location.hash.slice(2).split('/');
+  const [requestedPage, anchor = ''] = location.hash.slice(2).split('/');
+  const page = requestedPage === 'resources' ? 'quick-checks' : requestedPage;
   renderPage(pageNames[page] ? page : 'home', anchor, moveFocus);
  } else renderPage(currentPage, '', false);
 }
@@ -250,7 +251,7 @@ if (isPreview && saveWebsite) {
   const subject = subjects.find(item => item.id === id);
   if (!subject) return;
   active = subject; questionIndex = 0; answers = Array(subject.questions.length).fill(null);
-  document.getElementById('assessment-title').textContent = subject.name + ' Starter Self-Check';
+  document.getElementById('assessment-title').textContent = subject.name + ' Quick Check';
   section.hidden = false;questionArea.hidden = false;resultArea.hidden = true;
   document.getElementById('assessment-answer-review').replaceChildren();
   showQuestion(false);
@@ -262,7 +263,7 @@ if (isPreview && saveWebsite) {
   const total = active.questions.length;
   const correct = active.questions.filter((question,index) => answers[index] === question.correct).length;
   const score = document.getElementById('assessment-score');
-  score.textContent = correct + ' of ' + total + ' starter questions correct';
+  score.textContent = correct + ' of ' + total + ' questions correct';
   document.getElementById('assessment-summary-copy').textContent = correct === total
    ? 'All six answers were correct in this check. Explore the explanations, then consider more challenging questions with a teacher or tutor.'
    : 'Use the explanations to explore the questions that were tricky. One useful next step is to revisit a single topic together.';
@@ -301,7 +302,7 @@ if (isPreview && saveWebsite) {
   support.dataset.route = route;
   support.href = isPreview ? '#/'+route : route === 'tutoring' ? 'tutoring.html' : 'booster-classes.html';
   support.textContent = route === 'tutoring' ? 'Explore 1:1 Tutoring' : 'Explore Booster Classes';
-  announcement.textContent = 'Self-check complete. '+score.textContent+'. Feedback is ready.';
+  announcement.textContent = 'Quick Check complete. '+score.textContent+'. Feedback is ready.';
   focusAndScroll(score);
  }
  document.querySelectorAll('[data-start-assessment]').forEach(button => button.addEventListener('click',()=>startAssessment(button.dataset.startAssessment)));
@@ -316,6 +317,26 @@ if (isPreview && saveWebsite) {
   else {questionIndex++;showQuestion();}
  });
  back.addEventListener('click',()=>{if (questionIndex > 0) {questionIndex--;showQuestion();}});
+ document.getElementById('save-check-feedback').addEventListener('click',()=>{
+  if(!active || answers.some(answer=>!Number.isInteger(answer)))return;
+  const correct=active.questions.filter((q,i)=>answers[i]===q.correct).length;
+  const revisit=active.questions.filter((q,i)=>answers[i]!==q.correct).map(q=>'• '+q.topic);
+  const lines=[
+   'EFL Tutors — '+active.name+' Quick Check',
+   'Saved: '+new Date().toLocaleString('en-GB'),
+   correct+' of '+active.questions.length+' questions correct',
+   'This is a snapshot of these six questions, not an exam grade.',
+   '', 'Topics worth revisiting:',
+   ...(revisit.length?revisit:['No topics to revisit from these six questions. Try fresh questions with a tutor to explore further.']),
+   '', 'Your answers and explanations:'
+  ];
+  active.questions.forEach((q,i)=>lines.push('',(i+1)+'. '+q.topic+' — '+(answers[i]===q.correct?'Correct':'Worth revisiting'),q.prompt,'Your answer: '+q.options[answers[i]],'Correct answer: '+q.options[q.correct],q.explanation));
+  lines.push('','Next step: share this feedback with a tutor and choose a focus for practice. Review understanding with fresh questions and lesson work. Repeating this check uses the same questions.','Your answers have not been submitted to EFL Tutors. This file is your own copy.');
+  const url=URL.createObjectURL(new Blob([lines.join('\n')],{type:'text/plain;charset=utf-8'}));
+  const link=document.createElement('a');link.href=url;link.download='efl-'+active.id+'-quick-check-feedback.txt';document.body.append(link);link.click();link.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),10000);
+  announcement.textContent='Your Quick Check feedback file is ready to save. Nothing has been sent to EFL Tutors.';
+ });
  document.getElementById('assessment-restart').addEventListener('click',()=>{if(active)startAssessment(active.id);});
  document.getElementById('choose-another-subject').addEventListener('click',()=>{
   active = null;answers = [];section.hidden = true;
@@ -328,10 +349,10 @@ if (isPreview && saveWebsite) {
    const show = category.value === 'all' || card.dataset.resourceCategory === category.value;
    card.hidden = !show;if(show)count++;
   });
-  document.getElementById('resource-count').textContent = count + ' subject assessment' + (count === 1 ? '' : 's');
+  document.getElementById('resource-count').textContent = count + ' subject Quick Check' + (count === 1 ? '' : 's');
  });
  window.addEventListener('efl-page-change',event=>{
-  if (event.detail.page !== 'resources') {active = null;answers = [];section.hidden = true;}
+  if (event.detail.page !== 'quick-checks') {active = null;answers = [];section.hidden = true;}
  });
 })();
 

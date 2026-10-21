@@ -8,7 +8,7 @@ from threading import Thread
 from playwright.sync_api import sync_playwright
 
 ROOT=Path(__file__).resolve().parents[1]
-PAGES=['index.html','booster-classes.html','tutoring.html','schools-partners.html','our-approach.html','resources.html']
+PAGES=['index.html','booster-classes.html','tutoring.html','schools-partners.html','our-approach.html','quick-checks.html']
 class Quiet(SimpleHTTPRequestHandler):
  def log_message(self,*args):pass
 server=ThreadingHTTPServer(('127.0.0.1',8778),partial(Quiet,directory=str(ROOT)))
@@ -28,12 +28,50 @@ try:
     assert page.locator('h1:visible').count()==1,filename
     assert page.evaluate('document.documentElement.scrollWidth<=innerWidth'),(width,filename)
     assert page.locator('.nav-link[aria-current="page"]').count()==1
+    whatsapp=page.locator('.whatsapp-float')
+    assert whatsapp.is_visible()
+    assert whatsapp.get_attribute('href').startswith('https://wa.me/447803375101?text=')
+    assert whatsapp.get_attribute('target')=='_blank'
+    box=whatsapp.bounding_box();assert box['x']>=0 and box['x']+box['width']<=width
     if page.locator('.menu-toggle').is_visible():
      page.locator('.menu-toggle').click()
      assert page.locator('#navigation').is_visible()
      page.locator('.menu-toggle').click()
   assert not external,external
   print('PASS: all six pages fit five widths; current-page and mobile navigation work; no unsolicited Google requests.',flush=True)
+  # Old bookmarks continue to open the renamed page.
+  page.goto('http://127.0.0.1:8778/resources.html',wait_until='networkidle')
+  assert page.locator('.site-page:visible').get_attribute('data-page')=='quick-checks'
+  page.goto('http://127.0.0.1:8778/preview.html#/resources',wait_until='networkidle')
+  assert page.locator('.site-page:visible').get_attribute('data-page')=='quick-checks'
+  for mode in ['static','preview']:
+   page.goto('http://127.0.0.1:8778/'+('booster-classes.html' if mode=='static' else 'preview.html#/booster-classes'),wait_until='networkidle')
+   assert page.locator('.site-page:visible a[data-route="quick-checks"]').count()>=5
+   for subject in ['maths','applications-of-maths','english']:
+    page.locator('.offering-check-link[data-anchor="check-'+subject+'"]').click()
+    card=page.locator('#check-'+subject);assert card.is_visible()
+    assert page.locator('.site-page:visible').get_attribute('data-page')=='quick-checks'
+    card.locator('[data-start-assessment]').click()
+    assert page.locator('#assessment-title').inner_text().endswith('Quick Check')
+    page.go_back()
+  page.goto('http://127.0.0.1:8778/quick-checks.html',wait_until='networkidle')
+  page.locator('[data-start-assessment="maths"]').click()
+  import json
+  questions=json.loads((ROOT/'draft-source/assessments.json').read_text())[0]['questions']
+  for q in questions:
+   page.get_by_role('radio').nth(q['correct']).check();page.locator('#assessment-next').click()
+  with page.expect_download() as feedback:
+   page.locator('#save-check-feedback').click()
+  report=Path(temp)/'feedback.txt';feedback.value.save_as(report)
+  text=report.read_text()
+  assert feedback.value.suggested_filename=='efl-maths-quick-check-feedback.txt'
+  assert '6 of 6 questions correct' in text and 'not an exam grade' in text
+  assert 'Indices' in text and 'Circle geometry' in text
+  assert all(q['explanation'] in text for q in questions)
+  assert 'Your answers have not been submitted to EFL Tutors.' in text
+  assert not external,external
+  print('PASS: WhatsApp links use the approved number; all three class-specific Quick Check links work in static and standalone copies; legacy links and feedback download work without submission.',flush=True)
+
   page.goto('http://127.0.0.1:8778/booster-classes.html')
   assert page.locator('.timetable tbody tr:visible').count()==6
   page.locator('#filter-subject').select_option(label='Maths')

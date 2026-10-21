@@ -61,12 +61,14 @@ class SinglePage(HTMLParser):
  def handle_comment(self,d):
   if not self.skip:self.parts.append('<!--'+d+'-->')
 site=root
-pages={'home':('index.html','Scottish Booster Classes & Tuition | EFL Tutors'),'booster-classes':('booster-classes.html','Booster Classes, Timetable & FAQs | EFL Tutors'),'tutoring':('tutoring.html','1:1 Tutoring & Prices | EFL Tutors'),'schools-partners':('schools-partners.html','Schools & Partners | EFL Tutors'),'our-approach':('our-approach.html','Our Approach | EFL Tutors'),'resources':('resources.html','Free Subject Assessments & Resources | EFL Tutors')}
+pages={'home':('index.html','Scottish Booster Classes & Tuition | EFL Tutors'),'booster-classes':('booster-classes.html','Booster Classes, Timetable & FAQs | EFL Tutors'),'tutoring':('tutoring.html','1:1 Tutoring & Prices | EFL Tutors'),'schools-partners':('schools-partners.html','Schools & Partners | EFL Tutors'),'our-approach':('our-approach.html','Our Approach | EFL Tutors'),'quick-checks':('quick-checks.html','Free Quick Checks & Feedback | EFL Tutors')}
 for page,(filename,title) in pages.items():
  parser=SinglePage(page);parser.feed(source)
  output=''.join(parser.parts)
  output=re.sub(r'<title>.*?</title>','<title>'+title+'</title>',output,count=1,flags=re.S)
  (site/filename).write_text(output)
+# Keep previously shared resource URLs working after the Quick Checks rename.
+(site/'resources.html').write_text((site/'quick-checks.html').read_text())
 # Styles, scripts and editorial notes already live at the site root.
 if assets.resolve()!=(site/'assets').resolve():shutil.copytree(assets,site/'assets',dirs_exist_ok=True)
 print('Built preview.html and six static pages. Original photos are retained.')

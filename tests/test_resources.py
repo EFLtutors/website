@@ -41,7 +41,7 @@ with TemporaryDirectory(prefix='efl-resources-') as isolated:
   page.on('pageerror',lambda e:errors.append(str(e)))
   page.on('response',lambda r:bad.append((r.url,r.status)) if r.status>=400 else None)
   page.on('request',lambda r:requests.append(r.url))
-  page.goto('http://127.0.0.1:8765/resources.html',wait_until='networkidle')
+  page.goto('http://127.0.0.1:8765/quick-checks.html',wait_until='networkidle')
   assert page.locator('h1:visible').count()==1
   assert page.locator('[data-resource-category]').count()==12
   for category,count in [('Maths & Science',5),('English & Media',2),('Humanities',3),('Business & Social Sciences',2),('all',12)]:
@@ -59,7 +59,7 @@ with TemporaryDirectory(prefix='efl-resources-') as isolated:
     if question.get('diagram')=='circle-chord':
      assert page.get_by_role('img',name='Circle and chord AB').is_visible()
     answer(page,question)
-   assert page.locator('#assessment-score').inner_text()=='6 of 6 starter questions correct',subject['id']
+   assert page.locator('#assessment-score').inner_text()=='6 of 6 questions correct',subject['id']
    assert page.locator('.assessment-band-result p').all_text_contents()==['2 of 2 correct']*3
    assert page.locator('.answer-review-item').count()==6
    explanations=page.locator('.review-explanation').all_text_contents()
@@ -71,7 +71,7 @@ with TemporaryDirectory(prefix='efl-resources-') as isolated:
   maths=SUBJECTS[0]
   page.locator('[data-start-assessment="maths"]').click()
   for question in maths['questions']:answer(page,question,False)
-  assert page.locator('#assessment-score').inner_text()=='0 of 6 starter questions correct'
+  assert page.locator('#assessment-score').inner_text()=='0 of 6 questions correct'
   assert page.locator('.assessment-band-result p').all_text_contents()==['0 of 2 correct']*3
   assert page.locator('.topic-summary').nth(1).locator('li').count()==6
   page.locator('#assessment-restart').click()
@@ -84,20 +84,20 @@ with TemporaryDirectory(prefix='efl-resources-') as isolated:
   assert page.get_by_role('radio').nth((maths['questions'][1]['correct']+1)%4).is_checked()
   page.locator('#assessment-next').click()
   for question in maths['questions'][2:]:answer(page,question)
-  assert page.locator('#assessment-score').inner_text()=='4 of 6 starter questions correct'
+  assert page.locator('#assessment-score').inner_text()=='4 of 6 questions correct'
   assert page.locator('.assessment-band-result p').all_text_contents()==['0 of 2 correct','2 of 2 correct','2 of 2 correct']
   page.locator('.answer-review-item').first.locator('summary').click()
   assert page.locator('.answer-review-item').first.locator('.review-correct').is_visible()
   print('PASS: zero and mixed scores, revisiting topics, back/change answers, review disclosures and restart.',flush=True)
   # The standalone copy needs no sibling files and includes the assessments when saved.
-  requests.clear();page.goto('http://127.0.0.1:8766/preview.html#/resources',wait_until='networkidle')
+  requests.clear();page.goto('http://127.0.0.1:8766/preview.html#/quick-checks',wait_until='networkidle')
   assert requests==['http://127.0.0.1:8766/preview.html'],requests
-  assert page.locator('.site-page:not([hidden])').get_attribute('data-page')=='resources'
+  assert page.locator('.site-page:not([hidden])').get_attribute('data-page')=='quick-checks'
   page.locator('[data-start-assessment="english"]').click()
   for question in SUBJECTS[2]['questions']:answer(page,question)
   # Leaving a preview page clears the attempt.
   page.locator('header nav').get_by_role('link',name='Home',exact=True).click()
-  page.locator('header nav').get_by_role('link',name='Resources',exact=True).click()
+  page.locator('header nav').get_by_role('link',name='Quick Checks',exact=True).click()
   assert not page.locator('#free-assessment').is_visible()
   page.locator('[data-start-assessment="maths"]').click();answer(page,maths['questions'][0])
   with page.expect_download() as event:page.get_by_role('button',name='Save Website',exact=True).click()
@@ -114,7 +114,7 @@ with TemporaryDirectory(prefix='efl-resources-') as isolated:
   print('PASS: standalone resources, route reset, fresh saved attempts, all six pages and both original photos retained.',flush=True)
   for width in [360,390,768,1024,1440]:
    page.set_viewport_size({'width':width,'height':1000})
-   page.goto('http://127.0.0.1:8765/resources.html',wait_until='networkidle')
+   page.goto('http://127.0.0.1:8765/quick-checks.html',wait_until='networkidle')
    assert page.evaluate('document.documentElement.scrollWidth<=innerWidth'),('library',width)
    page.locator('[data-start-assessment="modern-studies"]').click()
    assert page.evaluate('document.documentElement.scrollWidth<=innerWidth'),('question',width)
@@ -134,7 +134,7 @@ with TemporaryDirectory(prefix='efl-resources-') as isolated:
    assert page.locator('.assessment-band-result p').all_text_contents()==['2 of 2 correct']*3
    assert page.evaluate('document.documentElement.scrollWidth<=innerWidth'),('difficulty feedback',width)
   page.set_viewport_size({'width':390,'height':844});page.goto('http://127.0.0.1:8765/',wait_until='networkidle')
-  page.get_by_role('button',name='Menu',exact=True).click();page.locator('header nav').get_by_role('link',name='Resources',exact=True).click();page.wait_for_url('**/resources.html')
+  page.get_by_role('button',name='Menu',exact=True).click();page.locator('header nav').get_by_role('link',name='Quick Checks',exact=True).click();page.wait_for_url('**/quick-checks.html')
   assert page.locator('.resource-card').count()==12
   assert not errors,errors
   assert not bad,bad
