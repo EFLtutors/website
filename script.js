@@ -83,7 +83,7 @@ tabs.forEach((tab,i) => {
  });
 });
 
-// Timetable filters preserve the original six distinct classes.
+// Timetable filters use the published class rows, including confirmed science classes.
 const subjectFilter = document.getElementById('filter-subject');
 if (subjectFilter) {
  const dayFilter = document.getElementById('filter-day'), availabilityFilter = document.getElementById('filter-availability');
@@ -197,18 +197,21 @@ document.getElementById('copy-enquiry').addEventListener('click',async()=>{
 const saveWebsite = document.getElementById('save-website');
 const photoStatus = document.getElementById('photo-status');
 function replacePhoto(config, image) {
- const frame = document.querySelector(config.frameSelector);
- if (!frame) return;
- image.className = config.imageClass + ' founder-image';image.dataset.photo = config.key;
+ const frames = document.querySelectorAll(config.frameSelector);
+ if (!frames.length) return;
+ image.className = config.imageClass + (config.key === 'florence' ? ' tutor-portrait' : ' founder-image');image.dataset.photo = config.key;
  image.alt = config.alt;image.decoding = 'async';
  image.width = image.naturalWidth;image.height = image.naturalHeight;
- frame.querySelectorAll('.' + config.imageClass + ',.photo-number,.silhouette,.photo-label').forEach(node => node.remove());
- frame.prepend(image);frame.classList.add('has-photo');frame.removeAttribute('role');frame.removeAttribute('aria-label');
+ frames.forEach((frame,index) => {
+  frame.querySelectorAll('.' + config.imageClass + ',.tutor-initial,.photo-number,.silhouette,.photo-label').forEach(node => node.remove());
+  frame.prepend(index ? image.cloneNode(true) : image);frame.classList.add('has-photo');frame.removeAttribute('role');frame.removeAttribute('aria-label');
+ });
  const button = document.getElementById(config.buttonId);if (button) button.textContent = config.changeLabel;
 }
 const photoConfigs = [
  {key:'hero',inputId:'hero-file',buttonId:'choose-hero',frameSelector:'.hero-photo',imageClass:'hero-image',alt:'Emily Mason, founder of EFL Tutors',changeLabel:'Change Hero Photo'},
- {key:'portrait',inputId:'portrait-file',buttonId:'choose-portrait',frameSelector:'.founder-photo',imageClass:'portrait-image',alt:'Professional portrait of Emily Mason',changeLabel:'Change Professional Portrait'}
+ {key:'portrait',inputId:'portrait-file',buttonId:'choose-portrait',frameSelector:'.founder-photo',imageClass:'portrait-image',alt:'Professional portrait of Emily Mason',changeLabel:'Change Professional Portrait'},
+ {key:'florence',inputId:'florence-file',buttonId:'choose-florence',frameSelector:'[data-tutor-photo="florence"]',imageClass:'florence-portrait',alt:'Florence, Lead Tutor',changeLabel:'Change Florence’s Portrait'}
 ];
 async function photoFromFile(file) {
  const data = await new Promise((resolve,reject) => {const reader = new FileReader();reader.onload = () => resolve(reader.result);reader.onerror = reject;reader.readAsDataURL(file);});
@@ -239,7 +242,7 @@ if (isPreview && saveWebsite) {
     if (!src || !/^data:image\/(jpeg|png|webp|avif);base64,[A-Za-z0-9+/=\s]+$/.test(src)) continue;
     const image = new Image();image.src=src;await image.decode();replacePhoto(config,image);count++;
    }
-   photoStatus.textContent=count ? count+' photos restored. Save Website to keep them.' : 'No embedded founder photos were found in that file.';
+   photoStatus.textContent=count ? count+' photos restored. Save Website to keep them.' : 'No embedded team or founder photos were found in that file.';
   } catch {photoStatus.textContent='Unable to restore photos from that file.';} finally {event.target.value='';}
  });
  saveWebsite.addEventListener('click', () => {
@@ -255,7 +258,7 @@ if (isPreview && saveWebsite) {
   copy.querySelector('body').dataset.startPage=currentPage;
   const blob=new Blob(['<!doctype html>\n',copy.outerHTML],{type:'text/html;charset=utf-8'});
   const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='efl-tutors-complete-website.html';document.body.append(link);link.click();link.remove();
-  setTimeout(()=>URL.revokeObjectURL(url),10000);photoStatus.textContent='Complete website saved with both photos and all six pages.';
+  setTimeout(()=>URL.revokeObjectURL(url),10000);photoStatus.textContent='Complete website saved with your photos and all six pages.';
  });
 }
 

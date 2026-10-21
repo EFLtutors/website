@@ -12,7 +12,7 @@ base=config['site_url'].rstrip('/')
 if urlparse(base).scheme!='https':raise ValueError('Use an HTTPS production site URL.')
 pages={
  'home':('index.html','Scottish Booster Classes & Personal Tuition | EFL Tutors','Online Booster Classes at £75 per month and personal 1:1 tutoring for S1–S6 across Scotland. Meet our PVG-checked team and find suitable support.'),
- 'booster-classes':('booster-classes.html','National 5 Booster Classes · £75/month | EFL Tutors','Small-group National 5 tuition in Maths, Applications of Maths and English. See our £75 monthly price, example timetable, Quick Checks and parent FAQs.'),
+ 'booster-classes':('booster-classes.html','National 5 Booster Classes · £75/month | EFL Tutors','National 5 Booster Classes in Maths, Applications of Maths, English, Physics and Chemistry. View the £75 monthly price, class timetable, Quick Checks and FAQs.'),
  'tutoring':('tutoring.html','Personal 1:1 Tutoring & Hourly Prices | EFL Tutors','Explore individual online tutoring for National 5, Higher and Advanced Higher. View subjects and hourly prices, meet the team and ask about tutor fit.'),
  'schools-partners':('schools-partners.html','Tuition for Schools & Education Partners | EFL Tutors','Discuss a potential tuition partnership for Scottish secondary learners. Agree learning goals, support needs, safeguarding and delivery with EFL Tutors.'),
  'our-approach':('our-approach.html','Meet Our Tutors & Teaching Approach | EFL Tutors','Meet Lead Tutor Florence, Michael and Neel. Learn how EFL combines practice, understanding and confidence, with individual support and PVG-checked tutors.'),

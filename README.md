@@ -59,3 +59,5 @@ The first suite covers all 72 answers, explanations, scoring, navigation, keyboa
 Read [audit-and-handover.md](audit-and-handover.md) for the audit, implementation, evidence register and remaining inputs. Undefined pass-rate/demographic percentages are held out of public copy. Approved subjects and biographies are now populated; individual qualification levels and approved tutor portraits still need confirming. Pricing, timetable, publication permissions and business policies require final review.
 
 **Draft indexing is disabled.** Confirm `site_url`, then set `indexable: true` and rebuild when the approved public site is ready to launch. The live website has not been deployed or changed.
+
+Latest draft: self-hosted Nunito Sans body text; Monday Physics 6:30 pm and Tuesday Chemistry 6 pm live (£75/month). The standalone toolbar also lets you add Florence’s portrait to both her profiles and save it with the website. The public build still needs her original JPG attachment.

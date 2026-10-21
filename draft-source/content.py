@@ -24,6 +24,8 @@ def render_team(records, full=False):
             if not photo.startswith('assets/') or '..' in photo:
                 raise ValueError('Team photographs must use local assets.')
             identity=f'<img class="tutor-portrait" src="{escaped(photo)}" alt="{name}, {escaped(record["role"])}" width="320" height="400" loading="lazy">'
+        if record['id']=='florence':
+            identity=f'<div class="tutor-photo-slot {"has-photo" if record.get("photo") else ""}" data-tutor-photo="florence">{identity}</div>'
         subjects=''
         if record['subjects']:
             subjects=f'<p class="tutor-subjects"><strong>Subjects:</strong> {escaped(", ".join(record["subjects"]))}</p>'

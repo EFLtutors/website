@@ -11,7 +11,9 @@ Extract this ZIP, then open OPEN-WEBSITE.html in a modern browser.
 All six main pages, original founder photos and 12 Quick Checks are embedded.
 The audit and handover is included as audit-and-handover.md.
 
-Use the top photo controls to change either image, then Save Website to keep it.
+Use the top photo controls to change the founder images or add Florence’s portrait.
+Add Florence’s Portrait updates her homepage and Our Approach profiles and shows the whole image.
+Choose Save Website to keep your photos in the downloaded HTML.
 Quick Checks run locally. Save My Feedback creates a local text file; no answers are submitted.
 WhatsApp/email links work through your own apps. A prepared email is not sent until you send it.
 

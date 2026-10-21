@@ -16,7 +16,7 @@ What was already working: the blue-and-gold identity, authentic founder photos, 
 | Page | Improvements |
 | --- | --- |
 | Home | Clearer understanding/confidence headline; Booster Classes retain the primary action; contextual secondary enquiry; named team near the service comparison; concise philosophy replaces repeated marketing cards; undefined percentages removed; year-group detail expandable; shorter school introduction. |
-| Booster Classes | £75 pricing and all six timetable rows preserved; class context carried into WhatsApp/email; waiting-list buttons request information rather than implying registration; direct subject Quick Checks and the Check → Practise → Review journey retained. |
+| Booster Classes | £75 pricing and all six original timetable rows preserved; Monday Physics at 6:30 pm added and existing Tuesday Chemistry at 6 pm updated to live on owner confirmation; class context carried into WhatsApp/email; waiting-list buttons request information rather than implying registration; direct subject Quick Checks and the Check → Practise → Review journey retained. |
 | 1:1 Tutoring | Existing prices/subjects preserved; Katie's unaltered Florence testimonial comes from the shared evidence record; contact choices use genuine available routes. |
 | Our Approach | Florence introduced prominently as Lead Tutor, with Michael and Neel as key tutors; owner-approved subjects and biographies, including Michael’s GTC Scotland registration/SQA marking role and Neel’s medical studies; Katie's feedback linked to Florence; safeguarding and TutorCruncher copy retained without invented features; no unverified demographic percentage. |
 | Schools & Partners | School contact retains organisation/role/cohort context; no identifiable pupil data requested; no invented contract history, delivery agreement or reporting service. |
@@ -54,7 +54,7 @@ The existing Calendly URL was preserved from the live website. A first generic r
 | Michael and Neel as key tutors; all PVG checked/compliant | This owner brief | Supplied subjects/biographies are now incorporated. Michael’s registration and marking role and Neel’s student/instructor roles use owner-approved wording. Confirm individual qualification levels and approved portraits; keep credentials current. |
 | Booster Classes £75/month | Explicit owner instruction | Confirm joining, billing and cancellation terms. No term length invented. |
 | 1:1 from £40/£45/£50 by level | Existing live website, rechecked 21 October 2026 | Confirm current rates, subject availability and S1–S3 pricing. |
-| Six timetable rows; 4–8 students; weekly 75-minute sessions | Existing live website | Confirm current times, dates and capacity. The timetable is not live inventory. |
+| Seven timetable rows; 4–8 students; weekly 75-minute sessions | Original six rows plus owner-confirmed Monday Physics 6:30 pm and Tuesday Chemistry 6 pm live updates, 21 October 2026 | Physics uses National 5 like the existing timetable; confirm if different. Confirm dates/capacity. The timetable is not live inventory. |
 | School partnerships/reporting | Future discussions | Agree scope, safeguarding, procurement, consent/data handling, delivery and reporting before commissioning. |
 
 No new exam result, independence outcome, client identity, testimonial, tutor qualification or partner logo was invented. There is not yet approved evidence for every desired outcome category. Add genuine independence, engagement and examination stories when authorised evidence is available.
@@ -92,3 +92,9 @@ The available browser suites cover all 72 Quick Check answers; six-page navigati
 Additional review used Chromium desktop/mobile screenshots and axe-core 4.10.3 against WCAG 2.0/2.1/2.2 A/AA and best-practice checks. The six main pages at mobile/desktop plus contact and Quick Check states returned zero automated violations after fixes. The provider’s CAPTCHA flow and assistive-technology use still require manual testing. Automated accessibility checks are useful evidence, not a claim of complete compliance or a substitute for assistive-technology testing. There is no configured project linter, production monitoring or real-user performance analytics.
 
 Before launch: finish tutor/claims approvals, confirm prices/timetable, approve privacy and commercial policies and safeguarding procedures, test the real contact/booking routes, finish the TutorCruncher field/domain setup and delivery test, confirm domain/hosting, enable indexing at the appropriate time, and deploy the public files. The current live website has not been changed.
+
+## Latest readability and class updates
+
+Main text uses self-hosted Nunito Sans with Poppins headings, clearer line spacing and larger action text. EFL colours and existing page structure remain. Physics (Monday 6:30 pm) and Chemistry (Tuesday 6 pm) are labelled live, with £75/month pricing, contextual enquiries and subject Quick Checks. Chemistry updates its existing row rather than creating a duplicate.
+
+Florence’s inline chat photograph is visible but its original file is not accessible in the workspace. The draft therefore retains her initial rather than inventing a photo. The standalone Add Florence’s Portrait control accepts the original, updates both profiles in contained, uncropped frames and includes it in Save Website. An accessible JPG attachment is needed to incorporate the exact photograph in the repository/public site.

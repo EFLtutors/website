@@ -47,7 +47,7 @@ try:
   for mode in ['static','preview']:
    page.goto('http://127.0.0.1:8778/'+('booster-classes.html' if mode=='static' else 'preview.html#/booster-classes'),wait_until='networkidle')
    assert page.locator('.site-page:visible a[data-route="quick-checks"]').count()>=5
-   for subject in ['maths','applications-of-maths','english']:
+   for subject in ['maths','applications-of-maths','english','physics','chemistry']:
     page.locator('.offering-check-link[data-anchor="check-'+subject+'"]').click()
     card=page.locator('#check-'+subject);assert card.is_visible()
     assert page.locator('.site-page:visible').get_attribute('data-page')=='quick-checks'
@@ -70,12 +70,26 @@ try:
   assert all(q['explanation'] in text for q in questions)
   assert 'Your answers have not been submitted to EFL Tutors.' in text
   assert not external,external
-  print('PASS: WhatsApp links use the approved number; all three class-specific Quick Check links work in static and standalone copies; legacy links and feedback download work without submission.',flush=True)
+  print('PASS: WhatsApp links use the approved number; all five class-specific Quick Check links work in static and standalone copies; legacy links and feedback download work without submission.',flush=True)
 
   page.goto('http://127.0.0.1:8778/booster-classes.html')
-  assert page.locator('.timetable tbody tr:visible').count()==6
+  assert page.locator('.timetable tbody tr:visible').count()==7
   page.locator('#filter-subject').select_option(label='Maths')
   assert page.locator('.timetable tbody tr:visible').count()==2
+  page.locator('#reset-timetable').click()
+  for subject,day,time in [('Physics','Monday','18:30'),('Chemistry','Tuesday','18:00')]:
+   page.locator('#filter-subject').select_option(label=subject)
+   row=page.locator('.timetable tbody tr:visible')
+   assert row.count()==1,(subject,'must not duplicate existing Chemistry')
+   assert row.get_attribute('data-day')==day
+   assert row.get_attribute('data-availability')=='open'
+   assert row.locator('time').get_attribute('datetime')==time
+   assert row.locator('.availability').inner_text()=='Live class'
+   row.locator('[data-enquiry]').click()
+   assert subject in page.locator('#class-choice').inner_text()
+   assert '£75' in page.locator('#class-choice').inner_text()
+   assert subject in page.locator('#enquiry-whatsapp').get_attribute('href')
+   page.locator('.close-dialog').click()
   page.locator('#reset-timetable').click()
   page.locator('.timetable tbody tr').first.locator('[data-enquiry]').click()
   assert page.locator('#enquiry').is_visible()
@@ -92,6 +106,23 @@ try:
    assert before['width']==after['width'] and before['height']==after['height']
    assert page.locator(frame).evaluate('(e)=>getComputedStyle(e).overflow')=='hidden'
   assert page.locator('.founder-image').count()==2
+  # A portrait updates both Florence profiles, stays contained and survives export.
+  from PIL import Image
+  fixture=Path(temp)/'portrait-fixture.jpg'
+  Image.new('RGB',(667,1000),'#7d9cba').save(fixture)
+  page.locator('#florence-file').set_input_files(fixture)
+  page.wait_for_function('document.querySelectorAll(".florence-portrait").length===2')
+  assert page.locator('.founder-image').count()==2
+  for width in [390,1440]:
+   page.set_viewport_size({'width':width,'height':1000})
+   for target in ['home','our-approach']:
+    page.evaluate('(target)=>renderPage(target,"",false)',target)
+    portrait=page.locator('.site-page:visible .florence-portrait')
+    assert portrait.evaluate('(i)=>getComputedStyle(i).objectFit')=='contain'
+    frame=portrait.locator('..').bounding_box();box=portrait.bounding_box()
+    assert box['width']<=frame['width'] and box['height']<=frame['height']
+    assert page.evaluate('document.documentElement.scrollWidth<=innerWidth')
+  page.evaluate('renderPage("home","",false)')
   profile=page.locator('#google-profile')
   assert profile.is_hidden() and profile.locator('iframe').get_attribute('src') is None
   # Intercept the explicit third-party request so this check is deterministic and offline.
@@ -104,6 +135,8 @@ try:
    page.locator('#save-website').click()
   saved=Path(temp)/'saved.html';download.value.save_as(saved)
   saved_text=saved.read_text()
+  assert saved_text.count('class="florence-portrait tutor-portrait"')==2
+  assert 'data-photo="florence"' in saved_text
   assert '<div class="google-profile" id="google-profile" hidden' in saved_text
   assert not re.search(r'<iframe[^>]*\ssrc=',saved_text)
   page.locator('#navigation a[data-route="our-approach"]').click()
@@ -114,6 +147,13 @@ try:
   assert page.locator('#testimonials').is_visible()
   assert not errors,errors
   assert not bad,bad
+  offline=browser.new_page()
+  # This managed browser blocks file://; fulfil the saved HTML without asset requests.
+  offline.route('**/*',lambda route:route.fulfill(body=saved_text,content_type='text/html') if route.request.url=='http://127.0.0.1:8778/saved-copy.html' else route.abort())
+  offline.goto('http://127.0.0.1:8778/saved-copy.html',wait_until='networkidle')
+  assert offline.locator('.florence-portrait').count()==2
+  assert offline.locator('.florence-portrait').first.evaluate('(i)=>i.naturalWidth')==667
+  offline.close()
   print('PASS: timetable enquiries, original-photo uploads, review opt-in/reset and saved offline copy work; no failed local assets or JavaScript errors.',flush=True)
   page.set_viewport_size({'width':1440,'height':1000});page.goto('http://127.0.0.1:8778/index.html',wait_until='networkidle')
   page.evaluate('Promise.all([...document.images].filter(i=>i.classList.contains("founder-image")).map(i=>{i.loading="eager";return i.decode();}))')

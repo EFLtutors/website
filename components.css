@@ -1,13 +1,16 @@
 /* Shared refinements and evidence/team components. The original theme is retained in styles.css. */
 [hidden] { display: none !important; }
-:root { --control-size: 13px; --space-section: 64px; }
+:root { --control-size: 14px; --space-section: 64px; }
+/* Readable body text complements the existing Poppins headings and EFL colours. */
+body { font-family: var(--body); font-size: 18px; line-height: 1.65; }
+.testimonial blockquote { font-style: normal; line-height: 1.65; }
 .section { padding-block: var(--space-section); }
 .button { font-size: var(--control-size); min-height: 48px; }
-.text-link, .text-button { font-size: 13px; min-height: 44px; align-items: center; }
+.text-link, .text-button { font-size: 14px; min-height: 44px; align-items: center; }
 .text-button { display: inline-flex; }
 nav a, summary, .menu-toggle { min-height: 44px; }
 summary { align-content: center; }
-.nav nav > .nav-link { font-size: 12px; display: inline-flex; align-items: center; }
+.nav nav > .nav-link { font-size: 13px; display: inline-flex; align-items: center; }
 .nav nav > .button.outline { color: var(--blue); border-color: var(--blue); }
 .nav nav > .button.outline:hover { background: var(--pale); }
 .hero { padding-block: 40px; }
@@ -36,6 +39,21 @@ summary { align-content: center; }
 .named-tutor .text-button { justify-content: start; padding: 0; text-align: left; font-size: 12px; }
 .named-tutor .text-link { font-size: 12px; }
 .tutor-portrait { width: 96px; height: 120px; object-fit: cover; }
+.tutor-photo-slot { flex: 0 0 auto; max-width: 100%; overflow: hidden; }
+.tutor-photo-slot.has-photo { width: 150px; }
+.tutor-photo-slot .tutor-portrait { display: block; width: 100%; height: auto; aspect-ratio: 2 / 3; object-fit: contain; background: var(--pale); }
+.live-science-classes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 28px; }
+.live-science-class { border-top: 3px solid var(--gold); padding: 25px; background: var(--pale); min-width: 0; }
+.live-science-class h3 { margin-bottom: 15px; }
+.live-science-class .eyebrow { margin-bottom: 10px; }
+.live-science-class p { color: var(--muted); }
+.live-science-class p strong { color: var(--blue); }
+.live-science-class .button-row { align-items: center; }
+.timetable th { font-size: 11px; }
+.timetable td .button { font-size: 12px; min-height: 44px; white-space: normal; }
+.availability, .result-count { font-size: 12px; }
+.timetable td::before { font-size: 10px; }
+.photo-editor button, .photo-editor #photo-fit { font-size: 12px; min-height: 40px; }
 .tutor-subjects strong { color: var(--blue); }
 .tutor-story { max-width: 850px; margin: 35px auto 0; }
 .tutor-story > .eyebrow { text-align: center; }
@@ -80,6 +98,7 @@ footer .footer-grid a { min-height: 32px; }
   .trust-facts strong { font-size: 24px; }
   .trust-facts p { font-size: 16px; }
   .inclusion-words { font-size: 29px; }
+  .live-science-classes { grid-template-columns: 1fr; }
 }
 @media (max-width: 520px) {
   .hero h1 { font-size: 39px; }
