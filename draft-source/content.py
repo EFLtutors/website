@@ -7,6 +7,39 @@ from urllib.parse import urlparse
 def escaped(value):
     return html.escape(str(value), quote=True)
 
+def render_google_reviews(records, featured=False):
+    cards=[]
+    for record in records:
+        if featured and not record.get('featured'):continue
+        if record['excerpt'] not in record['quote']:raise ValueError('Google excerpts must be verbatim.')
+        if record['rating'] not in range(1,6):raise ValueError('Invalid review rating.')
+        for field in ['source_url','author_url']:
+            parsed=urlparse(record[field])
+            if parsed.scheme!='https' or parsed.hostname!='www.google.com':raise ValueError('Google attribution must use Google source links.')
+        date=record['published']
+        from datetime import date as date_type
+        display=date_type.fromisoformat(date).strftime('%d %B %Y').lstrip('0')
+        quote=record['excerpt'] if featured else record['quote']
+        more=f'<a class="text-link" href="{escaped(record["source_url"])}" target="_blank" rel="noopener">Read on Google<span class="sr-only">: {escaped(record["name"])} (opens in a new tab)</span> →</a>'
+        cards.append(f'<figure class="google-review-card"><div class="google-review-card-top"><span class="google-review-source">Google review</span><span class="google-review-stars" role="img" aria-label="{record["rating"]} out of 5 stars">{"★"*record["rating"]}</span></div><h3>{escaped(record["title"])}</h3><blockquote>{escaped(quote)}</blockquote><figcaption><a href="{escaped(record["author_url"])}" target="_blank" rel="noopener">{escaped(record["name"])}<span class="sr-only"> (Google profile, opens in a new tab)</span></a><span>{escaped(record["context"])} · <time datetime="{escaped(date)}">{display}</time></span><small>Client-reported · {escaped(record["focus"])}</small></figcaption>{more}</figure>')
+    return ''.join(cards)
+
+def render_social_links(config):
+    icons={
+        'facebook':'<path d="M14 21v-8h3l.5-3H14V8c0-.9.3-1.5 1.5-1.5H18V3.2A21 21 0 0 0 15 3c-3 0-5 1.8-5 5v2H7v3h3v8Z"/>',
+        'linkedin':'<path d="M5 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm-1.7 2h3.4v11H3.3Zm5.5 0H12v1.5c.7-1.2 1.9-1.8 3.4-1.8 3.6 0 4.3 2.4 4.3 5.5V21h-3.4v-5.2c0-1.2 0-2.9-1.8-2.9s-2.1 1.4-2.1 2.8V21H8.8Z"/>'}
+    result=[]
+    for key,label,domain in [('facebook','Facebook','facebook.com'),('linkedin','LinkedIn','linkedin.com')]:
+        icon=f'<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">{icons[key]}</svg>'
+        url=config.get('social_links',{}).get(key)
+        if url:
+            parsed=urlparse(url)
+            if parsed.scheme!='https' or not (parsed.hostname==domain or parsed.hostname.endswith('.'+domain)):raise ValueError('Unexpected social profile URL.')
+            result.append(f'<a class="social-link" href="{escaped(url)}" target="_blank" rel="noopener" aria-label="EFL Tutors on {label} (opens in a new tab)">{icon}<span>{label}</span></a>')
+        else:
+            result.append(f'<span class="social-link social-pending editor-only" role="img" aria-label="{label}: profile link needed">{icon}<span>{label} · link needed</span></span>')
+    return '<div class="social-links">'+''.join(result)+'</div>'
+
 def render_testimonial(record, compact=True):
     quote = escaped(record['quote'])
     excerpt = escaped(record['excerpt'])
@@ -61,6 +94,11 @@ def render_parent_support(needs, testimonials):
 def expand(source, root):
     testimonials=json.loads((root/'draft-source/testimonials.json').read_text())
     team=json.loads((root/'draft-source/team.json').read_text())
+    google=json.loads((root/'draft-source/google-reviews.json').read_text())
+    config=json.loads((root/'draft-source/site.json').read_text())
+    source=source.replace('<!-- google-reviews:featured -->',render_google_reviews(google,featured=True))
+    source=source.replace('<!-- google-reviews:all -->',render_google_reviews(google))
+    source=source.replace('<!-- social-links -->',render_social_links(config))
     needs=json.loads((root/'draft-source/home-support.json').read_text())
     source=source.replace('<!-- parent-support -->',render_parent_support(needs,testimonials))
     for record in testimonials:

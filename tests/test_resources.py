@@ -97,7 +97,7 @@ with TemporaryDirectory(prefix='efl-resources-') as isolated:
   for question in SUBJECTS[2]['questions']:answer(page,question)
   # Leaving a preview page clears the attempt.
   page.locator('header nav').get_by_role('link',name='Home',exact=True).click()
-  page.locator('header nav').get_by_role('link',name='Quick Checks',exact=True).click()
+  page.locator('.nav-resource-menu summary').click();page.locator('header nav').get_by_role('link',name='Quick Checks',exact=True).click()
   assert not page.locator('#free-assessment').is_visible()
   page.locator('[data-start-assessment="maths"]').click();answer(page,maths['questions'][0])
   with page.expect_download() as event:page.get_by_role('button',name='Save Website',exact=True).click()
@@ -105,13 +105,13 @@ with TemporaryDirectory(prefix='efl-resources-') as isolated:
   saved_text=(isolated/'saved.html').read_text()
   assert 'assessment-data' in saved_text and 'Your answer:' not in saved_text.split('<script>',1)[0]
   page.goto('http://127.0.0.1:8766/saved.html',wait_until='networkidle')
-  assert page.locator('.site-page').count()==6
+  assert page.locator('.site-page').count()==len(json.loads((ROOT/'draft-source/pages.json').read_text()))
   assert not page.locator('#free-assessment').is_visible()
   page.locator('[data-start-assessment="maths"]').click()
   assert page.locator('#assessment-progress-label').inner_text()=='Question 1 of 6'
   assert page.get_by_role('radio',checked=True).count()==0
   assert page.locator('.hero-image').evaluate('(e)=>e.complete && e.naturalWidth===4016')
-  print('PASS: standalone resources, route reset, fresh saved attempts, all six pages and both original photos retained.',flush=True)
+  print('PASS: standalone resources, route reset, fresh saved attempts, all pages and both original photos retained.',flush=True)
   for width in [360,390,768,1024,1440]:
    page.set_viewport_size({'width':width,'height':1000})
    page.goto('http://127.0.0.1:8765/quick-checks.html',wait_until='networkidle')
@@ -134,7 +134,7 @@ with TemporaryDirectory(prefix='efl-resources-') as isolated:
    assert page.locator('.assessment-band-result p').all_text_contents()==['2 of 2 correct']*3
    assert page.evaluate('document.documentElement.scrollWidth<=innerWidth'),('difficulty feedback',width)
   page.set_viewport_size({'width':390,'height':844});page.goto('http://127.0.0.1:8765/',wait_until='networkidle')
-  page.get_by_role('button',name='Menu',exact=True).click();page.locator('header nav').get_by_role('link',name='Quick Checks',exact=True).click();page.wait_for_url('**/quick-checks.html')
+  page.get_by_role('button',name='Menu',exact=True).click();page.locator('.nav-resource-menu summary').click();page.locator('header nav').get_by_role('link',name='Quick Checks',exact=True).click();page.wait_for_url('**/quick-checks.html')
   assert page.locator('.resource-card').count()==12
   assert not errors,errors
   assert not bad,bad

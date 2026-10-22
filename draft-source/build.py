@@ -1,4 +1,4 @@
-"""Build a self-contained review copy and a conventional six-page static site."""
+"""Build a self-contained review copy and a conventional multi-page static site."""
 from pathlib import Path
 from html.parser import HTMLParser
 import base64,mimetypes,re,shutil,json,html as html_utils
@@ -10,15 +10,9 @@ if not assets.exists():assets=root/'site/assets'
 config=json.loads((root/'draft-source/site.json').read_text())
 base=config['site_url'].rstrip('/')
 if urlparse(base).scheme!='https':raise ValueError('Use an HTTPS production site URL.')
-pages={
- 'home':('index.html','Scotland’s Tutoring & Learning Specialists | EFL Tutors','Confidence-boosting National 5 Booster Classes at £75/month and personal tuition from S1 to Advanced Higher. Meet our tutors and try a free Quick Check.'),
- 'booster-classes':('booster-classes.html','National 5 Booster Classes · £75/month | EFL Tutors','National 5 Booster Classes in Maths, Applications of Maths, English, Physics and Chemistry. View the £75 monthly price, class timetable, Quick Checks and FAQs.'),
- 'tutoring':('tutoring.html','Personal 1:1 Tutoring & Hourly Prices | EFL Tutors','Explore individual online tutoring for National 5, Higher and Advanced Higher. View subjects and hourly prices, meet the team and ask about tutor fit.'),
- 'schools-partners':('schools-partners.html','Tuition for Schools & Education Partners | EFL Tutors','Discuss a potential tuition partnership for Scottish secondary learners. Agree learning goals, support needs, safeguarding and delivery with EFL Tutors.'),
- 'our-approach':('our-approach.html','Meet Our Tutors & Teaching Approach | EFL Tutors','Meet Lead Tutor Florence, Michael and Neel. Learn how EFL combines practice, understanding and confidence, with individual support and PVG-checked tutors.'),
- 'quick-checks':('quick-checks.html','Free Subject Quick Checks & Feedback | EFL Tutors','Try six free subject questions with instant explanations. Save your feedback, identify a focus for practice and discuss next steps with a tutor.')
-}
-metadata={key:{'title':value[1],'description':value[2]} for key,value in pages.items()}
+page_records=json.loads((root/'draft-source/pages.json').read_text())
+pages={key:(record['filename'],record['title'],record['description']) for key,record in page_records.items()}
+metadata={key:{'title':record['title'],'description':record['description'],'label':record['label']} for key,record in page_records.items()}
 source=expand((root/'draft-source/source.html').read_text(),root)
 source=source.replace('</head>','<script type="application/json" id="page-metadata">'+json.dumps(metadata,ensure_ascii=False).replace('<','\\u003c')+'</script></head>')
 form_url=config.get('enquiry_form_url')
@@ -28,7 +22,7 @@ if form_url:
 socket_key=config.get('tutorcruncher_public_key')
 if socket_key and not re.fullmatch(r'[a-f0-9]{20}',socket_key):raise ValueError('Invalid TutorCruncher public Socket key format.')
 origin=urlparse(base).scheme+'://'+urlparse(base).netloc
-socket_markup=('<section id="online-enquiry-option" class="online-enquiry-option" data-origin="'+origin+'" hidden><button id="load-online-enquiry" type="button" class="button outline full">Request a Callback Online</button><p class="form-privacy">Loads TutorCruncher and Google CAPTCHA. For subject, year-group and class details, use the WhatsApp or email options.</p><p id="online-enquiry-status" role="status"></p><iframe id="online-enquiry-frame" title="EFL Tutors online enquiry form" data-src="enquiry-widget.html" hidden></iframe></section>') if socket_key else ''
+socket_markup=('<section id="online-enquiry-option" class="online-enquiry-option" data-origin="'+origin+'" hidden><button id="load-online-enquiry" type="button" class="button blue full">Request a Callback Online</button><p class="form-privacy">Loads TutorCruncher and Google CAPTCHA. For subject, year-group and class details, use the WhatsApp or email options.</p><p id="online-enquiry-status" role="status"></p><iframe id="online-enquiry-frame" title="EFL Tutors online enquiry form" data-src="enquiry-widget.html" hidden></iframe></section>') if socket_key else ''
 source=source.replace('<!-- tutorcruncher-enquiry -->',socket_markup)
 widget=(root/'draft-source/enquiry-widget.html').read_text().replace('__PUBLIC_KEY__',socket_key or '').replace('__APP_ORIGIN__',origin)
 (root/'enquiry-widget.html').write_text(widget)
@@ -112,7 +106,7 @@ for page,(filename,title,description) in pages.items():
 (site/'resources.html').write_text((site/'quick-checks.html').read_text())
 # Styles, scripts and editorial notes already live at the site root.
 if assets.resolve()!=(site/'assets').resolve():shutil.copytree(assets,site/'assets',dirs_exist_ok=True)
-print('Built preview.html and six static pages. Original photos are retained.')
+print('Built preview.html and '+str(len(pages))+' static pages. Original photos are retained.')
 
 # Draft indexing is deliberately disabled until launch inputs are approved.
 (site/'robots.txt').write_text('User-agent: *\n'+('Allow: /\nSitemap: '+base+'/sitemap.xml\n' if config['indexable'] else 'Disallow: /\n'))

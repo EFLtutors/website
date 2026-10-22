@@ -1,6 +1,7 @@
 """Functional checks for parent navigation, review loading and contained founder photos."""
 from pathlib import Path
 import re
+import json
 from tempfile import TemporaryDirectory
 from functools import partial
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
@@ -8,7 +9,7 @@ from threading import Thread
 from playwright.sync_api import sync_playwright
 
 ROOT=Path(__file__).resolve().parents[1]
-PAGES=['index.html','booster-classes.html','tutoring.html','schools-partners.html','our-approach.html','quick-checks.html']
+PAGES=[record['filename'] for record in json.loads((ROOT/'draft-source/pages.json').read_text()).values()]
 class Quiet(SimpleHTTPRequestHandler):
  def log_message(self,*args):pass
 server=ThreadingHTTPServer(('127.0.0.1',8778),partial(Quiet,directory=str(ROOT)))
@@ -38,7 +39,7 @@ try:
      assert page.locator('#navigation').is_visible()
      page.locator('.menu-toggle').click()
   assert not external,external
-  print('PASS: all six pages fit five widths; current-page and mobile navigation work; no unsolicited Google requests.',flush=True)
+  print('PASS: all public pages fit five widths; current-page and mobile navigation work; no unsolicited Google requests.',flush=True)
   for filename in ['index.html','preview.html#/home']:
    page.goto('http://127.0.0.1:8778/'+filename,wait_until='networkidle')
    for button in page.locator('[data-parent-need]').all():
@@ -104,7 +105,7 @@ try:
    assert row.get_attribute('data-day')==day
    assert row.get_attribute('data-availability')=='open'
    assert row.locator('time').get_attribute('datetime')==time
-   assert row.locator('.availability').inner_text()=='Live class'
+   assert row.locator('.availability').inner_text()=='Spaces available'
    row.locator('[data-enquiry]').click()
    assert subject in page.locator('#class-choice').inner_text()
    assert '£75' in page.locator('#class-choice').inner_text()
@@ -163,8 +164,8 @@ try:
   assert page.locator('[data-page="our-approach"]').is_visible()
   assert profile.is_hidden() and profile.locator('iframe').get_attribute('src') is None
   # Review anchor remains reachable after navigating to a different page.
-  page.locator('footer a[data-anchor="testimonials"]').click()
-  assert page.locator('#testimonials').is_visible()
+  page.locator('footer a[data-route="reviews"]').click()
+  assert page.locator('[data-page="reviews"]').is_visible()
   assert not errors,errors
   assert not bad,bad
   offline=browser.new_page()

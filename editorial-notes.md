@@ -1,8 +1,8 @@
-# EFL Tutors review notes — 21 October 2026
+# EFL Tutors review notes — 22 October 2026
 
 The complete audit and implementation handover is in `audit-and-handover.md` in the repository and download ZIP.
 
-This remains the existing six-page EFL Tutors website with the original blue and gold and both founder photographs. Booster Classes lead at £75/month; personal 1:1 prices remain from £40/£45/£50 for National 5/Higher/Advanced Higher. Quick Checks and WhatsApp signposts remain throughout.
+This remains the existing EFL Tutors website, expanded to 11 pages with the original blue and gold and both founder photographs. Booster Classes lead at £75/month; personal 1:1 prices remain from £40/£45/£50 for National 5/Higher/Advanced Higher. Quick Checks and WhatsApp signposts remain throughout.
 
 Florence is now featured as Lead Tutor using the owner's brief. Michael and Neel are named as key tutors. The owner’s approved subjects and biographies are incorporated. Michael’s GTC Scotland registration and SQA exam marking and Neel’s medical studies at St Andrews/swimming instruction are included. Individual qualification levels and approved tutor portraits still need confirmation; no images have been invented.
 
@@ -10,7 +10,7 @@ The three existing testimonials are unchanged and stored in `draft-source/testim
 
 The 95% pass rate and 65% demographic figure are held out of public copy until their definitions, populations and periods are supplied. The owner-supplied 500+ students and 2020 founding year remain, with attribution. Confirm the total before launch.
 
-Google's official EFL profile showed 5.0/5 from 20 reviews on 21 October 2026. The dated summary and optional Google profile embed remain separate from the website testimonials. It is not an automatically synchronised review-card feed. Profile: https://www.google.com/maps?cid=12299693131977025457 (Place ID ChIJ_wwbh-nHh0gRsWfNqbxJsao). The original business name still appears there.
+Google's official EFL profile showed 5.0/5 from 20 reviews when rechecked on 22 October 2026. Four genuine public reviews were retrieved read-only and stored with attribution/source links. Three appear directly on the homepage and all four on Reviews. The dated selection is maintained manually. Original website testimonials remain a separate source, and the optional profile embed is still available. Profile: https://www.google.com/maps?cid=12299693131977025457 (Place ID ChIJ_wwbh-nHh0gRsWfNqbxJsao). The original business name still appears there.
 
 Enquiry dialogs now offer contextual WhatsApp and transparent email drafts, with validation and copy fallback. The optional official TutorCruncher Socket callback form is now configured from the supplied public key, with mandatory CAPTCHA. It loads on request from the allowed production origin; local/downloaded reviews retain WhatsApp/email. Live schema/form loading was verified read-only. No actual enquiry was submitted. Add subject/year/message fields in TutorCruncher, decide required contact details, confirm the deployed origin and manually test delivery before launch. The default Socket analytics is disabled and the isolated frame is cleared on close. The existing Calendly page was reachable with HTTP 200 using browser headers. Availability and booking/confirmation delivery still need a manual check.
 
@@ -29,3 +29,13 @@ Verification for this revision: all four browser suites and JavaScript syntax ch
 Homepage messaging revision: “Scotland’s tutoring and learning specialists” introduces confidence-boosting classes/tuition, followed by “Confidence Starts Here”. Seven selectable concern circles connect to practical support, aims and existing verbatim parent evidence or a conversation link. Suggested outcomes such as enjoying learning, feeling calmer and exam readiness are aims, not fabricated review quotes or guaranteed results. The original parent testimonials and dated Google review links remain. Michael and Neel now have concise homepage biographies from approved information, alongside Lead Tutor Florence.
 
 A local illustrated Scotland SVG includes the mainland, Hebrides, Orkney and Shetland, with geographic reference labels rather than branch claims. Its on-page and asset-file credits retain the source licence. The homepage explicitly welcomes different learners from S1 to Advanced Higher; currently featured Booster Classes remain National 5. A prominent free Quick Check leads into a conversation and clear pricing/arrangements. Existing founder photos, science timetable, offline export and enquiry routes are preserved. The live website has not been deployed.
+
+22 October additions: More Resources contains Quick Checks, Blog, Founder Story and Become a Tutor. Two original draft guidance articles explain current Quick Checks and tuition choices without invented dates/authorship. Quick Check metadata, cards, assessment headings and saved feedback now explicitly state National 5. All 72 question/answer pairs are unchanged; Higher checks are for a later addition.
+
+The £75/month offer now explicitly includes planned lessons, Curriculum for Excellence / National 5 content, knowledge gaps/foundations, worksheets and homework, progress checks and weekly 75-minute tutor contact. These benefits and the full lesson-refund promise are owner-supplied. No refund deadlines, exclusions or processing rules have been invented. “One of the most reputable” is the owner’s requested subjective wording, not an independently measured ranking. The public TutorCruncher reviews URL is still needed to link that reference.
+
+Facebook/LinkedIn SVG icons are ready but exact profile URLs are still needed. Until supplied, their unlinked placeholders appear only in the standalone review copy. Public pages omit unconfigured icons. Do not guess account URLs.
+
+TutorCruncher’s real form was rechecked read-only on 22 October: script, options and enquiry schema all returned HTTP 200; four provider inputs rendered. No enquiry was submitted. The exact remaining account setup and controlled-delivery test are in TUTORCRUNCHER-SETUP.md, included in both ZIPs.
+
+This revision passed all five browser suites, all 72 Quick Check answers and static/standalone route and saved-file checks. Responsive screenshots covered 11 pages at six widths (320–1440px). Automated accessibility checks passed for pages and open menus; the review toolbar’s landmark and photo-fit label were corrected. Enquiry delivery and provider account changes remain manual launch tasks.

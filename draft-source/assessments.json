@@ -3,7 +3,6 @@
     "id": "maths",
     "name": "Maths",
     "category": "Maths & Science",
-    "symbol": "x²",
     "description": "Try algebra, percentages, Pythagoras, indices and circle geometry.",
     "support": "booster-classes",
     "questions": [
@@ -92,13 +91,13 @@
         "difficulty": "hard",
         "grade_band": "A"
       }
-    ]
+    ],
+    "level": "National 5"
   },
   {
     "id": "applications-of-maths",
     "name": "Applications of Maths",
     "category": "Maths & Science",
-    "symbol": "%",
     "description": "Explore everyday money, data, measures and practical calculations.",
     "support": "booster-classes",
     "questions": [
@@ -186,13 +185,13 @@
         "difficulty": "hard",
         "grade_band": "A"
       }
-    ]
+    ],
+    "level": "National 5"
   },
   {
     "id": "english",
     "name": "English",
     "category": "English & Media",
-    "symbol": "Aa",
     "description": "Read a short passage and explore language, evidence and analysis.",
     "support": "booster-classes",
     "questions": [
@@ -280,13 +279,13 @@
         "difficulty": "hard",
         "grade_band": "A"
       }
-    ]
+    ],
+    "level": "National 5"
   },
   {
     "id": "physics",
     "name": "Physics",
     "category": "Maths & Science",
-    "symbol": "v/t",
     "description": "Check foundations in motion, forces, circuits, waves and energy.",
     "support": "tutoring",
     "questions": [
@@ -374,13 +373,13 @@
         "difficulty": "hard",
         "grade_band": "A"
       }
-    ]
+    ],
+    "level": "National 5"
   },
   {
     "id": "chemistry",
     "name": "Chemistry",
     "category": "Maths & Science",
-    "symbol": "H₂O",
     "description": "Explore particles, bonding, acids and chemical reactions.",
     "support": "booster-classes",
     "questions": [
@@ -468,13 +467,13 @@
         "difficulty": "hard",
         "grade_band": "A"
       }
-    ]
+    ],
+    "level": "National 5"
   },
   {
     "id": "biology",
     "name": "Biology",
     "category": "Maths & Science",
-    "symbol": "DNA",
     "description": "Try cell structures, photosynthesis, enzymes and living systems.",
     "support": "tutoring",
     "questions": [
@@ -562,13 +561,13 @@
         "difficulty": "hard",
         "grade_band": "A"
       }
-    ]
+    ],
+    "level": "National 5"
   },
   {
     "id": "history",
     "name": "History",
     "category": "Humanities",
-    "symbol": "H",
     "description": "Practise evidence, chronology, causes and historical interpretation.",
     "support": "tutoring",
     "questions": [
@@ -656,13 +655,13 @@
         "difficulty": "hard",
         "grade_band": "A"
       }
-    ]
+    ],
+    "level": "National 5"
   },
   {
     "id": "geography",
     "name": "Geography",
     "category": "Humanities",
-    "symbol": "N↑",
     "description": "Explore map skills, weather data and human–environment links.",
     "support": "tutoring",
     "questions": [
@@ -750,13 +749,13 @@
         "difficulty": "hard",
         "grade_band": "A"
       }
-    ]
+    ],
+    "level": "National 5"
   },
   {
     "id": "modern-studies",
     "name": "Modern Studies",
     "category": "Humanities",
-    "symbol": "MS",
     "description": "Check ideas about democracy, evidence, inequality and rights.",
     "support": "tutoring",
     "questions": [
@@ -844,13 +843,13 @@
         "difficulty": "hard",
         "grade_band": "A"
       }
-    ]
+    ],
+    "level": "National 5"
   },
   {
     "id": "business-management",
     "name": "Business Management",
     "category": "Business & Social Sciences",
-    "symbol": "BM",
     "description": "Explore stakeholders, costs, customer needs and business choices.",
     "support": "tutoring",
     "questions": [
@@ -938,13 +937,13 @@
         "difficulty": "hard",
         "grade_band": "A"
       }
-    ]
+    ],
+    "level": "National 5"
   },
   {
     "id": "psychology",
     "name": "Psychology",
     "category": "Business & Social Sciences",
-    "symbol": "Ψ",
     "description": "Try research methods, variables, ethics and interpreting results.",
     "support": "tutoring",
     "questions": [
@@ -1032,13 +1031,13 @@
         "difficulty": "hard",
         "grade_band": "A"
       }
-    ]
+    ],
+    "level": "National 5"
   },
   {
     "id": "media",
     "name": "Media",
     "category": "English & Media",
-    "symbol": "M▶",
     "description": "Explore audience, representation, language and media purpose.",
     "support": "tutoring",
     "questions": [
@@ -1126,6 +1125,7 @@
         "difficulty": "hard",
         "grade_band": "A"
       }
-    ]
+    ],
+    "level": "National 5"
   }
 ]

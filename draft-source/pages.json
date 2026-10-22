@@ -1,0 +1,68 @@
+{
+  "home": {
+    "filename": "index.html",
+    "label": "Home",
+    "title": "Scotland’s Tutoring & Learning Specialists | EFL Tutors",
+    "description": "Confidence-boosting National 5 Booster Classes at £75/month and personal tuition from S1 to Advanced Higher. Meet our tutors and try a free Quick Check."
+  },
+  "booster-classes": {
+    "filename": "booster-classes.html",
+    "label": "Booster Classes",
+    "title": "National 5 Booster Classes · £75/month | EFL Tutors",
+    "description": "National 5 Booster Classes in Maths, Applications of Maths, English, Physics and Chemistry. View the £75 monthly price, class timetable, Quick Checks and FAQs."
+  },
+  "tutoring": {
+    "filename": "tutoring.html",
+    "label": "1:1 Tutoring",
+    "title": "Personal 1:1 Tutoring & Hourly Prices | EFL Tutors",
+    "description": "Explore individual online tutoring for National 5, Higher and Advanced Higher. View subjects and hourly prices, meet the team and ask about tutor fit."
+  },
+  "schools-partners": {
+    "filename": "schools-partners.html",
+    "label": "Schools & Partners",
+    "title": "Tuition for Schools & Education Partners | EFL Tutors",
+    "description": "Discuss a potential tuition partnership for Scottish secondary learners. Agree learning goals, support needs, safeguarding and delivery with EFL Tutors."
+  },
+  "our-approach": {
+    "filename": "our-approach.html",
+    "label": "Our Approach",
+    "title": "Meet Our Tutors & Teaching Approach | EFL Tutors",
+    "description": "Meet Lead Tutor Florence, Michael and Neel. Learn how EFL combines practice, understanding and confidence, with individual support and PVG-checked tutors."
+  },
+  "quick-checks": {
+    "filename": "quick-checks.html",
+    "label": "Quick Checks",
+    "title": "Free Subject Quick Checks & Feedback | EFL Tutors",
+    "description": "Try six free subject questions with instant explanations. Save your feedback, identify a focus for practice and discuss next steps with a tutor."
+  },
+  "more-resources": {
+    "filename": "more-resources.html",
+    "label": "More Resources",
+    "title": "Resources for Scottish Learners & Families | EFL Tutors",
+    "description": "Explore free National 5 Quick Checks, learning guides, our founder story and opportunities to introduce yourself as a tutor."
+  },
+  "reviews": {
+    "filename": "reviews.html",
+    "label": "Reviews",
+    "title": "Google Reviews & Parent Experiences | EFL Tutors",
+    "description": "Read genuine Google reviews and parent feedback about EFL Tutors, including confidence, tutor support and client-reported exam progress."
+  },
+  "blog": {
+    "filename": "blog.html",
+    "label": "Blog",
+    "title": "Learning Guides for Scottish Parents | EFL Tutors",
+    "description": "Practical EFL guides to choosing tuition and using National 5 Quick Checks, with clear next steps for students and parents."
+  },
+  "founder-story": {
+    "filename": "founder-story.html",
+    "label": "Founder Story",
+    "title": "Emily’s Founder Story | EFL Tutors",
+    "description": "Meet Emily Mason, founder of EFL Tutors since 2020, and learn why understanding, confidence and personal support shape our Scotland-wide tuition."
+  },
+  "become-a-tutor": {
+    "filename": "become-a-tutor.html",
+    "label": "Become a Tutor",
+    "title": "Become a Tutor with EFL | EFL Tutors",
+    "description": "Introduce yourself to EFL Tutors. Share your subjects, experience and approach to helping Scottish secondary learners feel understood and supported."
+  }
+}

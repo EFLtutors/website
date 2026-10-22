@@ -66,7 +66,8 @@ try:
   with page.expect_download() as d:page.evaluate("document.getElementById('save-website').click()")
   saved=Path(temp)/'saved.html';d.value.save_as(saved);assert secret not in saved.read_text()
   assert re.search(r'<a id="enquiry-email-link"[^>]*href="([^"]+)"',saved.read_text())[1]=='mailto:hello@edinburghfifeandlothianstutors.co.uk'
-  for filename in ['index','booster-classes','tutoring','schools-partners','our-approach','quick-checks']:
+  for record in json.loads((ROOT/'draft-source/pages.json').read_text()).values():
+   filename=record['filename'].removesuffix('.html')
    page.goto('http://127.0.0.1:8779/'+filename+'.html',wait_until='networkidle')
    assert page.title().endswith('| EFL Tutors')
    assert page.locator('link[rel="canonical"]').count()==1

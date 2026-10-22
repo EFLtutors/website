@@ -4,13 +4,15 @@ const navigation = document.getElementById('navigation');
 function closeMenu() {
  menuButton.setAttribute('aria-expanded', 'false');
  navigation.classList.remove('open');
+ navigation.querySelectorAll('details[open]').forEach(details=>details.open=false);
 }
 menuButton.addEventListener('click', () => {
  const open = menuButton.getAttribute('aria-expanded') !== 'true';
  menuButton.setAttribute('aria-expanded', String(open)); navigation.classList.toggle('open', open);
 });
 document.addEventListener('keydown',event=>{if(event.key==='Escape' && menuButton.getAttribute('aria-expanded')==='true'){closeMenu();menuButton.focus();}});
-const pageNames = {home:'Home', 'booster-classes':'Booster Classes', tutoring:'1:1 Tutoring', 'schools-partners':'Schools & Partners', 'our-approach':'Our Approach', 'quick-checks':'Quick Checks'};
+const pageMetadata = JSON.parse(document.getElementById('page-metadata').textContent);
+const pageNames = Object.fromEntries(Object.entries(pageMetadata).map(([key,record])=>[key,record.label]));
 let currentPage = document.body.dataset.startPage || 'home';
 function renderPage(page, anchor = '', moveFocus = true) {
  const panel = document.querySelector('[data-page="' + page + '"]');
@@ -22,8 +24,9 @@ function renderPage(page, anchor = '', moveFocus = true) {
   if (link.dataset.route === page) link.setAttribute('aria-current', 'page');
   else link.removeAttribute('aria-current');
  });
+ navigation.querySelectorAll('.nav-resource-menu').forEach(menu=>menu.classList.toggle('has-current-page',Boolean(menu.querySelector('[aria-current="page"]'))));
  if (isPreview) {
-  const metadata=JSON.parse(document.getElementById('page-metadata').textContent)[page];
+  const metadata=pageMetadata[page];
   document.title=metadata.title;document.querySelector('meta[name="description"]').content=metadata.description;
  }
  closeMenu();
@@ -44,10 +47,15 @@ function routeFromLocation(moveFocus) {
 }
 if (isPreview) {
  document.addEventListener('click', event => {
-  const link = event.target.closest('a[data-route]');
+  const link = event.target.closest('a[data-route],a[href^="#"]');
   if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  let page = link.dataset.route, anchor = link.dataset.anchor || '';
+  if (!page) {
+   const href=link.getAttribute('href');if(href.length<2 || href.startsWith('#/'))return;
+   const target=document.getElementById(href.slice(1));if(!target)return;
+   anchor=target.id;page=target.closest('.site-page')?.dataset.page || currentPage;
+  }
   event.preventDefault();
-  const page = link.dataset.route, anchor = link.dataset.anchor || '';
   history.pushState(null, '', '#/' + page + (anchor ? '/' + anchor : ''));
   renderPage(page, anchor);
  });
@@ -220,6 +228,7 @@ function replacePhoto(config, image) {
   frame.querySelectorAll('.' + config.imageClass + ',.tutor-initial,.photo-number,.silhouette,.photo-label').forEach(node => node.remove());
   frame.prepend(index ? image.cloneNode(true) : image);frame.classList.add('has-photo');frame.removeAttribute('role');frame.removeAttribute('aria-label');
  });
+ document.querySelectorAll('[data-shared-photo="'+config.key+'"]').forEach(shared=>{shared.src=image.src;shared.width=image.naturalWidth;shared.height=image.naturalHeight;});
  const button = document.getElementById(config.buttonId);if (button) button.textContent = config.changeLabel;
 }
 const photoConfigs = [
@@ -266,13 +275,14 @@ if (isPreview && saveWebsite) {
   const assessment=copy.querySelector('#free-assessment');if(assessment)assessment.hidden=true;
   ['question-options','assessment-answer-review','assessment-score','assessment-summary-copy','assessment-topics','assessment-band-results','assessment-announcement','question-prompt','question-diagram','question-difficulty'].forEach(id=>{const node=copy.querySelector('#'+id);if(node)node.textContent='';});
   const googleProfile=copy.querySelector('#google-profile');if(googleProfile){googleProfile.hidden=true;googleProfile.querySelector('iframe').removeAttribute('src');copy.querySelector('#load-google-profile').setAttribute('aria-expanded','false');copy.querySelector('#load-google-profile').textContent='Show Google Profile Here ↓';}
+  copy.querySelectorAll('#navigation details[open]').forEach(details=>details.removeAttribute('open'));
   copy.querySelector('#navigation').classList.remove('open');copy.querySelector('.menu-toggle').setAttribute('aria-expanded','false');
   copy.querySelectorAll('input,textarea').forEach(input=>{input.removeAttribute('value');if(input.tagName==='TEXTAREA')input.textContent='';});
   document.querySelectorAll('select[id]').forEach(select=>{const target=copy.querySelector('#'+select.id);if(target)[...target.options].forEach(option=>option.toggleAttribute('selected',option.value===(select.closest('#enquiry-form')?'':select.value)));});
   copy.querySelector('body').dataset.startPage=currentPage;
   const blob=new Blob(['<!doctype html>\n',copy.outerHTML],{type:'text/html;charset=utf-8'});
   const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='efl-tutors-complete-website.html';document.body.append(link);link.click();link.remove();
-  setTimeout(()=>URL.revokeObjectURL(url),10000);photoStatus.textContent='Complete website saved with your photos and all six pages.';
+  setTimeout(()=>URL.revokeObjectURL(url),10000);photoStatus.textContent='Complete website saved with your photos and all pages.';
  });
 }
 
@@ -340,7 +350,7 @@ if (isPreview && saveWebsite) {
   const subject = subjects.find(item => item.id === id);
   if (!subject) return;
   active = subject; questionIndex = 0; answers = Array(subject.questions.length).fill(null);
-  document.getElementById('assessment-title').textContent = subject.name + ' Quick Check';
+  document.getElementById('assessment-title').textContent = subject.level + ' ' + subject.name + ' Quick Check';
   section.hidden = false;questionArea.hidden = false;resultArea.hidden = true;
   document.getElementById('assessment-answer-review').replaceChildren();
   showQuestion(false);
@@ -411,7 +421,7 @@ if (isPreview && saveWebsite) {
   const correct=active.questions.filter((q,i)=>answers[i]===q.correct).length;
   const revisit=active.questions.filter((q,i)=>answers[i]!==q.correct).map(q=>'• '+q.topic);
   const lines=[
-   'EFL Tutors — '+active.name+' Quick Check',
+   'EFL Tutors — '+active.level+' '+active.name+' Quick Check',
    'Saved: '+new Date().toLocaleString('en-GB'),
    correct+' of '+active.questions.length+' questions correct',
    'This is a snapshot of these six questions, not an exam grade.',
@@ -438,7 +448,7 @@ if (isPreview && saveWebsite) {
    const show = category.value === 'all' || card.dataset.resourceCategory === category.value;
    card.hidden = !show;if(show)count++;
   });
-  document.getElementById('resource-count').textContent = count + ' subject Quick Check' + (count === 1 ? '' : 's');
+  document.getElementById('resource-count').textContent = count + ' National 5 Quick Check' + (count === 1 ? '' : 's');
  });
  window.addEventListener('efl-page-change',event=>{
   if (event.detail.page !== 'quick-checks') {active = null;answers = [];section.hidden = true;}
@@ -464,3 +474,7 @@ if (isPreview && saveWebsite) {
  });
  window.addEventListener('efl-page-change',closeProfile);
 })();
+
+// Resource disclosure closes with Escape or when the parent clicks outside navigation.
+document.addEventListener('keydown',event=>{if(event.key==='Escape'){const open=navigation.querySelector('.nav-resource-menu[open]');if(open){open.open=false;open.querySelector('summary').focus();}}});
+document.addEventListener('click',event=>{if(!navigation.contains(event.target))navigation.querySelectorAll('.nav-resource-menu[open]').forEach(menu=>menu.open=false);});
